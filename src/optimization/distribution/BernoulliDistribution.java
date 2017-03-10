@@ -1,7 +1,7 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package hilldescent.distribution;
+package optimization.distribution;
 
 /**
  * @author Oscar Garavito

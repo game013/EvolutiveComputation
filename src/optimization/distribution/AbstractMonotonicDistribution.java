@@ -1,7 +1,7 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package hilldescent.distribution;
+package optimization.distribution;
 
 /**
  * @author Oscar Garavito
@@ -9,6 +9,9 @@ package hilldescent.distribution;
  */
 public abstract class AbstractMonotonicDistribution implements Distribution {
 
+	/**
+	 * Distribution of sign.
+	 */
 	private static final Distribution SIGN_DIST = BernoulliDistribution.getSignDistribution();
 
 	/*

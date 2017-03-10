@@ -7,7 +7,7 @@ package roulette;
 
 /**
  *
- * @author guest-whzuey
+ * @author oscar.garavito
  */
 public class RouletteAcumulated {
     

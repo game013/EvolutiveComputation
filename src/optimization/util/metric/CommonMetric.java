@@ -1,7 +1,7 @@
 /**
  * 
  */
-package hilldescent.metric;
+package optimization.util.metric;
 
 /**
  * @author Estudiante

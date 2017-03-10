@@ -1,13 +1,13 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package hilldescent.distribution;
+package optimization.distribution;
 
 /**
  * @author Oscar Garavito
  *
  */
-public class PowerLawDistribution extends AbstractMonotonicDistribution implements Distribution {
+public class ParetoDistribution extends AbstractMonotonicDistribution implements Distribution {
 
 	private final double a;
 
@@ -17,7 +17,7 @@ public class PowerLawDistribution extends AbstractMonotonicDistribution implemen
 	 * @param a
 	 * @param b
 	 */
-	public PowerLawDistribution(double a, double b) {
+	public ParetoDistribution(double a, double b) {
 
 		this.a = a;
 		this.b = b;
