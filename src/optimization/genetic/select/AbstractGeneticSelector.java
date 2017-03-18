@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Oscar Garavito
  *
  */
-public abstract class AbstractGeneticSelector<D> implements GeneticSelector<D> {
+public abstract class AbstractGeneticSelector<D, C> implements GeneticSelector<D, C> {
 
 	/**
 	 * Size of parent's sample.
@@ -31,6 +31,16 @@ public abstract class AbstractGeneticSelector<D> implements GeneticSelector<D> {
 
 		this.parentsSampleSize = parentsSampleSize;
 		this.random = new Random();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see optimization.genetic.select.GeneticSelector#getParentSampleSize()
+	 */
+	@Override
+	public int getParentsSampleSize() {
+
+		return this.parentsSampleSize;
 	}
 
 }

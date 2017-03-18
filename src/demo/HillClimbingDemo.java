@@ -14,10 +14,11 @@ import optimization.function.Function;
 import optimization.function.HyperCube;
 import optimization.function.RastriginFunction;
 import optimization.function.Space;
+import optimization.problem.OptimizationProblem;
+import optimization.search.Search;
 import optimization.search.hillclimbing.HillClimbing;
 import optimization.search.hillclimbing.Mutation;
 import optimization.search.hillclimbing.MutationByDistribution;
-import optimization.search.hillclimbing.Search;
 import optimization.util.metric.CommonMetric;
 
 /**
@@ -48,10 +49,11 @@ public class HillClimbingDemo {
 		Function<double[], Double> rastrigin = new RastriginFunction(10);
 		Mutation<double[]> mutation = new MutationByDistribution(distribution);
 		Search<double[], Double> hillDescent = new HillClimbing<>(numberOfIterations, mutation);
+		OptimizationProblem<double[], Double> problem = new OptimizationProblem<>(space, rastrigin);
 		int numberOfExperiments = 30;
 		double[] results = new double[numberOfExperiments];
 		for (int i = 0; i < numberOfExperiments; i++) {
-			results[i] = hillDescent.solve(space, rastrigin);
+			results[i] = hillDescent.solve(problem);
 		}
 		System.out.println(String.format("Distribution: [%s]", distribution.getClass().getSimpleName()));
 		System.out.println(new CommonMetric(results));

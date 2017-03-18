@@ -15,8 +15,7 @@ import roulette.RouletteAcumulated;
  * @author Oscar Garavito
  *
  */
-public abstract class AbstractRouletteGeneticSelector<D, C> extends AbstractGeneticSelector<D, C>
-		implements GeneticSelector<D, C> {
+public abstract class AbstractDoubleRouletteGeneticSelector<D> extends AbstractRouletteGeneticSelector<D, Double> {
 
 	/**
 	 * Constructor with given parent's sample size parameter.
@@ -24,7 +23,7 @@ public abstract class AbstractRouletteGeneticSelector<D, C> extends AbstractGene
 	 * @param parentsSampleSize
 	 *            Parent's sample size.
 	 */
-	protected AbstractRouletteGeneticSelector(int parentsSampleSize) {
+	protected AbstractDoubleRouletteGeneticSelector(int parentsSampleSize) {
 
 		super(parentsSampleSize);
 	}
@@ -36,10 +35,10 @@ public abstract class AbstractRouletteGeneticSelector<D, C> extends AbstractGene
 	 * optimization.function.Function)
 	 */
 	@Override
-	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> function) {
+	public List<Solution<D, Double>> selectParent(Population<D, Double> population, Function<D, Double> function) {
 
 		RouletteAcumulated roulette = new RouletteAcumulated(getProbabities(population, function));
-		List<Solution<D, C>> result = new ArrayList<>(this.parentsSampleSize);
+		List<Solution<D, Double>> result = new ArrayList<>(this.parentsSampleSize);
 		for (int i = 0; i < this.parentsSampleSize; i++) {
 			result.add(population.get(roulette.nextRandom()));
 		}
@@ -53,6 +52,7 @@ public abstract class AbstractRouletteGeneticSelector<D, C> extends AbstractGene
 	 * @param function
 	 * @return
 	 */
-	protected abstract double[] getProbabities(Population<D, C> population, Function<D, C> function);
+	@Override
+	protected abstract double[] getProbabities(Population<D, Double> population, Function<D, Double> function);
 
 }

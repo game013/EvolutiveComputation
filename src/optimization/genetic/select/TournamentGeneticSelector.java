@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import optimization.function.Function;
+import optimization.util.type.Population;
+import optimization.util.type.Solution;
 
 /**
  * @author Oscar Garavito
  *
  */
-public class TournamentGeneticSelector<D> extends AbstractGeneticSelector<D> implements GeneticSelector<D> {
+public class TournamentGeneticSelector<D, C> extends AbstractGeneticSelector<D, C> implements GeneticSelector<D, C> {
 
 	/**
 	 * Tournament size.
@@ -22,21 +24,24 @@ public class TournamentGeneticSelector<D> extends AbstractGeneticSelector<D> imp
 	/**
 	 * Uniform genetic selector.
 	 */
-	private final GeneticSelector<D> uniformSelector;
+	private final GeneticSelector<D, C> uniformSelector;
 
 	/**
 	 * Roulette genetic selector.
 	 */
-	private final GeneticSelector<D> rouletteSelector;
+	private final GeneticSelector<D, C> tournamentSelector;
 
 	/**
 	 * @param parentsSampleSize
 	 */
-	protected TournamentGeneticSelector(int parentsSampleSize) {
+	protected TournamentGeneticSelector(int parentsSampleSize, GeneticSelector<D, C> tournamentSelector) {
 
 		super(parentsSampleSize);
+		if (tournamentSelector.getParentsSampleSize() != 1) {
+			throw new IllegalArgumentException("Tournament selector must chosen only one individual.");
+		}
 		this.uniformSelector = new UniformGeneticSelector<>(TOURNAMENT_SIZE);
-		this.rouletteSelector = new RouletteGeneticSelector<>(1);
+		this.tournamentSelector = tournamentSelector;
 	}
 
 	/*
@@ -46,9 +51,9 @@ public class TournamentGeneticSelector<D> extends AbstractGeneticSelector<D> imp
 	 * optimization.function.Function)
 	 */
 	@Override
-	public List<D> selectParent(List<D> population, Function<D, Double> function) {
+	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> function) {
 
-		List<D> selectedParents = new ArrayList<>();
+		List<Solution<D, C>> selectedParents = new ArrayList<>();
 		for (int i = 0; i < super.parentsSampleSize; i++) {
 			selectedParents.add(playTournament(population, function));
 		}
@@ -62,15 +67,15 @@ public class TournamentGeneticSelector<D> extends AbstractGeneticSelector<D> imp
 	 * @param function
 	 * @return Winner of the tournament.
 	 */
-	private D playTournament(List<D> population, Function<D, Double> function) {
+	private Solution<D, C> playTournament(Population<D, C> population, Function<D, C> function) {
 
-		List<D> tournamentCompetitors = this.uniformSelector.selectParent(population, function);
+		List<Solution<D, C>> tournamentCompetitors = this.uniformSelector.selectParent(population, function);
 		int size = TOURNAMENT_SIZE;
 		while (size > 1) {
-			List<D> newParentList = new ArrayList<>();
+			List<Solution<D, C>> newParentList = new ArrayList<>();
 			for (int i = 0; i < size; i += 2) {
-				newParentList
-						.addAll(this.rouletteSelector.selectParent(tournamentCompetitors.subList(i, i + 1), function));
+				newParentList.addAll(this.tournamentSelector
+						.selectParent(new Population<>(tournamentCompetitors.subList(i, i + 1)), function));
 			}
 			size /= 2;
 			tournamentCompetitors = newParentList;

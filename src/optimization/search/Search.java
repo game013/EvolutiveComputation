@@ -1,10 +1,9 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.search.hillclimbing;
+package optimization.search;
 
-import optimization.function.Function;
-import optimization.function.Space;
+import optimization.problem.OptimizationProblem;
 
 /**
  * @author Oscar Garavito
@@ -25,6 +24,6 @@ public interface Search<D, C> {
 	 *            Function to evaluate fitness of solution.
 	 * @return Found solution.
 	 */
-	C solve(Space<D> space, Function<D, C> function);
+	C solve(OptimizationProblem<D, C> problem);
 
 }

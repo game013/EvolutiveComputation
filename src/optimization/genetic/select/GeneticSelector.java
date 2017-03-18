@@ -6,13 +6,14 @@ package optimization.genetic.select;
 import java.util.List;
 
 import optimization.function.Function;
+import optimization.util.type.Population;
+import optimization.util.type.Solution;
 
 /**
  * @author Oscar Garavito
  *
  */
-@FunctionalInterface
-public interface GeneticSelector<D> {
+public interface GeneticSelector<D, C> {
 
 	/**
 	 * Given a population this method selects parents to be used in next genetic
@@ -20,11 +21,18 @@ public interface GeneticSelector<D> {
 	 * 
 	 * @param population
 	 *            Population where parents will be chosen from.
-	 * @param function
+	 * @param fitnessFunction
 	 *            Function to calculate the fitness for each individual from
 	 *            population.
 	 * @return Parents population.
 	 */
-	List<D> selectParent(List<D> population, Function<D, Double> function);
+	List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> fitnessFunction);
+
+	/**
+	 * Gets the number of parents to be chosen.
+	 * 
+	 * @return
+	 */
+	int getParentsSampleSize();
 
 }

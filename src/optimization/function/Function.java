@@ -13,6 +13,7 @@ package optimization.function;
  * @param <C>
  *            Codomain of the function
  */
+@FunctionalInterface
 public interface Function<D, C> {
 
 	/**
@@ -22,12 +23,5 @@ public interface Function<D, C> {
 	 * @return
 	 */
 	C calculate(D params);
-
-	/**
-	 * Gets space of search.
-	 * 
-	 * @return
-	 */
-	Space<D> getSpace();
 
 }

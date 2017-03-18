@@ -5,8 +5,6 @@
  */
 package optimization.function;
 
-import java.util.Arrays;
-
 /**
  *
  * @author Estudiante
@@ -15,15 +13,11 @@ public class RastriginFunction implements Function<double[], Double> {
 
 	public static final double A = 10.0;
 
-	public final Space<double[]> space;
+	private final int dimension;
 
 	public RastriginFunction(int dimension) {
 
-		double[] lowerBound = new double[dimension];
-		Arrays.fill(lowerBound, -5.12);
-		double[] upperBound = new double[dimension];
-		Arrays.fill(upperBound, 5.12);
-		this.space = new HyperCube(lowerBound, upperBound);
+		this.dimension = dimension;
 	}
 
 	/*
@@ -33,6 +27,10 @@ public class RastriginFunction implements Function<double[], Double> {
 	@Override
 	public Double calculate(double[] params) {
 
+		if (dimension != params.length) {
+			throw new IllegalArgumentException(
+					"Parameters given to this function must be equals to defined dimension size.");
+		}
 		double result = 0.0;
 		for (double param : params) {
 			result += calculate(param);
@@ -47,16 +45,6 @@ public class RastriginFunction implements Function<double[], Double> {
 	private double calculate(double param) {
 
 		return Math.pow(param, 2.0) - A * Math.cos(2 * Math.PI * param);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see optimization.function.Function#getSpace()
-	 */
-	@Override
-	public Space<double[]> getSpace() {
-
-		return this.space;
 	}
 
 }

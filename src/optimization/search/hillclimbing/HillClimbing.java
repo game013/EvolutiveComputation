@@ -5,8 +5,8 @@
  */
 package optimization.search.hillclimbing;
 
-import optimization.function.Function;
-import optimization.function.Space;
+import optimization.problem.OptimizationProblem;
+import optimization.search.Search;
 
 /**
  *
@@ -35,16 +35,17 @@ public class HillClimbing<D, C extends Comparable<C>> implements Search<D, C> {
 	}
 
 	@Override
-	public C solve(Space<D> space, Function<D, C> function) {
+	public C solve(OptimizationProblem<D, C> problem) {
 
-		D solution = space.pick();
+		D solution = problem.getSpace().pick();
 		for (int i = 0; i < this.numberOfIterations; i++) {
-			D newSolution = space.repair(this.mutation.mutate(solution));
-			if (function.calculate(newSolution).compareTo(function.calculate(solution)) <= 0) {
+			D newSolution = problem.getSpace().repair(this.mutation.mutate(solution));
+			if (problem.getFitnessFunction().calculate(newSolution)
+					.compareTo(problem.getFitnessFunction().calculate(solution)) <= 0) {
 				solution = newSolution;
 			}
 		}
-		return function.calculate(solution);
+		return problem.getFitnessFunction().calculate(solution);
 	}
 
 }

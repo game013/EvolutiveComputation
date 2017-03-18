@@ -3,6 +3,8 @@
  */
 package optimization.function;
 
+import java.util.List;
+
 /**
  * @author Oscar Garavito
  * @param <D>
@@ -14,6 +16,12 @@ public interface Space<D> {
 	 * @return
 	 */
 	D pick();
+	
+	/**
+	 * @param n
+	 * @return
+	 */
+	List<D> pick(int n);
 
 	/**
 	 * @param data

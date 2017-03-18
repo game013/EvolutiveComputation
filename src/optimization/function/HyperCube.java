@@ -3,6 +3,9 @@
  */
 package optimization.function;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Oscar Garavito
  *
@@ -86,6 +89,16 @@ public class HyperCube implements Space<double[]> {
 	public double[] getUpperBound() {
 
 		return this.upperBound;
+	}
+
+	@Override
+	public List<double[]> pick(int n) {
+
+		List<double[]> elements = new ArrayList<>(n);
+		for (int i = 0; i < n; i++) {
+			elements.set(i, this.pick());
+		}
+		return elements;
 	}
 
 }

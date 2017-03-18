@@ -3,16 +3,18 @@
  */
 package optimization.genetic.select;
 
-import java.util.List;
 import java.util.stream.IntStream;
 
 import optimization.function.Function;
+import optimization.util.type.Population;
 
 /**
  * @author Oscar Garavito
  *
  */
-public class RankingGeneticSelector<D> extends AbstractRouletteGeneticSelector<D> implements GeneticSelector<D> {
+public class RankingGeneticSelector<D, C extends Comparable<C>> extends AbstractRouletteGeneticSelector<D, C>
+		implements
+			GeneticSelector<D, C> {
 
 	/**
 	 * @param parentsSampleSize
@@ -28,10 +30,11 @@ public class RankingGeneticSelector<D> extends AbstractRouletteGeneticSelector<D
 	 * getProbabities(java.util.List, optimization.function.Function)
 	 */
 	@Override
-	protected double[] getProbabities(List<D> population, Function<D, Double> function) {
+	protected double[] getProbabities(Population<D, C> population, Function<D, C> function) {
 
-		int[] sortedIndexes = IntStream.range(0, population.size()).boxed().sorted(
-				(i, j) -> function.calculate(population.get(i)).compareTo(function.calculate(population.get(j))))
+		int[] sortedIndexes = IntStream.range(0, population.size()).boxed()
+				.sorted((i, j) -> function.calculate(population.get(i).getSolution())
+						.compareTo(function.calculate(population.get(j).getSolution())))
 				.mapToInt(Integer::valueOf).toArray();
 		int F = population.size() * (population.size() + 1) / 2;
 		double[] probabilities = new double[population.size()];
