@@ -6,7 +6,7 @@ package optimization.genetic.select;
 import java.util.ArrayList;
 import java.util.List;
 
-import optimization.function.Function;
+import optimization.function.fitness.Function;
 import optimization.util.type.Population;
 import optimization.util.type.Solution;
 
@@ -22,7 +22,7 @@ public class UniformGeneticSelector<D, C> extends AbstractGeneticSelector<D, C> 
 	 * @param parentsSampleSize
 	 *            Parent's sample size.
 	 */
-	protected UniformGeneticSelector(int parentsSampleSize) {
+	public UniformGeneticSelector(int parentsSampleSize) {
 
 		super(parentsSampleSize);
 	}

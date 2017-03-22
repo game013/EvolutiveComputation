@@ -58,11 +58,26 @@ public class Population<D, C> {
 	}
 
 	/**
+	 * @param index
+	 * @param solution
+	 */
+	public void set(int index, Solution<D, C> solution) {
+
+		population.set(index, solution);
+	}
+
+	/**
 	 * @return
 	 */
 	public int size() {
 
 		return population.size();
+	}
+
+	@Override
+	public String toString() {
+
+		return this.getPopulation().toString();
 	}
 
 }

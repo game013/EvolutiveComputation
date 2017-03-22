@@ -6,12 +6,15 @@ package optimization.search.genetic;
 import java.util.ArrayList;
 import java.util.List;
 
-import optimization.function.Function;
+import optimization.function.fitness.Function;
+import optimization.function.space.Space;
 import optimization.genetic.operator.GeneticOperator;
 import optimization.genetic.replace.GeneticReplacement;
 import optimization.genetic.select.GeneticSelector;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
+import optimization.util.metric.PerformanceMetric;
+import optimization.util.metric.Tracer;
 import optimization.util.type.Population;
 import optimization.util.type.Solution;
 
@@ -19,9 +22,11 @@ import optimization.util.type.Solution;
  * @author Oscar Garavito
  *
  */
-public class GeneticAlgorithm<D, C> implements Search<D, C> {
+public class GeneticAlgorithm<D, C extends Comparable<C>> implements Search<D, C> {
 
 	private final int populationSize;
+
+	private final int numberOfIterations;
 
 	private final GeneticSelector<D, C> selector;
 
@@ -29,10 +34,18 @@ public class GeneticAlgorithm<D, C> implements Search<D, C> {
 
 	private final GeneticReplacement<D, C> replacement;
 
-	public GeneticAlgorithm(int populationSize, GeneticSelector<D, C> selector, GeneticOperator<D, C> geneticOperator,
-			GeneticReplacement<D, C> replacement) {
+	/**
+	 * @param populationSize
+	 * @param numberOfIterations
+	 * @param selector
+	 * @param geneticOperator
+	 * @param replacement
+	 */
+	public GeneticAlgorithm(int populationSize, int numberOfIterations, GeneticSelector<D, C> selector,
+			GeneticOperator<D, C> geneticOperator, GeneticReplacement<D, C> replacement) {
 
 		this.populationSize = populationSize;
+		this.numberOfIterations = numberOfIterations;
 		this.selector = selector;
 		this.geneticOperator = geneticOperator;
 		this.replacement = replacement;
@@ -44,14 +57,18 @@ public class GeneticAlgorithm<D, C> implements Search<D, C> {
 	 * OptimizationProblem)
 	 */
 	@Override
-	public C solve(OptimizationProblem<D, C> problem) {
+	public Solution<D, C> solve(OptimizationProblem<D, C> problem) {
 
-		// TODO : Adjust number of iterations. Return best value.
 		Population<D, C> population = this.loadFirstPopulation(problem);
-		for (int i = 0; i < 10; i++) {
-			population = this.nextPopulation(population, problem.getFitnessFunction());
+		Tracer.trace(population.getClass(), population);
+		PerformanceMetric metric = PerformanceMetric.getInstance();
+		for (int i = 0; i < this.numberOfIterations; i++) {
+			population = this.nextPopulation(population, problem.getFitnessFunction(), problem.getSpace());
+			Tracer.trace(population.getClass(), population);
 		}
-		return null;
+		metric.finish();
+		return population.getPopulation().stream()
+				.sorted((s1, s2) -> s2.getFitnessValue().compareTo(s1.getFitnessValue())).findFirst().orElse(null);
 	}
 
 	private Population<D, C> loadFirstPopulation(OptimizationProblem<D, C> problem) {
@@ -59,16 +76,17 @@ public class GeneticAlgorithm<D, C> implements Search<D, C> {
 		List<D> pop = problem.getSpace().pick(this.populationSize);
 		List<Solution<D, C>> initialSolutionList = new ArrayList<>(this.populationSize);
 		for (D individual : pop) {
-			initialSolutionList.add(new Solution<>(individual, problem.getFitnessFunction().calculate(individual)));
+			initialSolutionList.add(new Solution<>(individual, problem.getFitnessFunction()));
 		}
 		Population<D, C> population = new Population<>(initialSolutionList);
 		return population;
 	}
 
-	private Population<D, C> nextPopulation(Population<D, C> population, Function<D, C> fitnessFunction) {
+	private Population<D, C> nextPopulation(Population<D, C> population, Function<D, C> fitnessFunction,
+			Space<D> space) {
 
 		List<Solution<D, C>> parents = selector.selectParent(population, fitnessFunction);
-		List<Solution<D, C>> offspring = this.geneticOperator.apply(parents, fitnessFunction);
+		List<Solution<D, C>> offspring = this.geneticOperator.apply(parents, fitnessFunction, space);
 		return this.replacement.apply(population, offspring, fitnessFunction);
 	}
 

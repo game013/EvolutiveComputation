@@ -10,10 +10,10 @@ import optimization.distribution.ExponentialDistribution;
 import optimization.distribution.NormalDistribution;
 import optimization.distribution.ParetoDistribution;
 import optimization.distribution.UniformDistribution;
-import optimization.function.Function;
-import optimization.function.HyperCube;
-import optimization.function.RastriginFunction;
-import optimization.function.Space;
+import optimization.function.fitness.Function;
+import optimization.function.fitness.RastriginFunction;
+import optimization.function.space.HyperCube;
+import optimization.function.space.Space;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
 import optimization.search.hillclimbing.HillClimbing;
@@ -53,7 +53,7 @@ public class HillClimbingDemo {
 		int numberOfExperiments = 30;
 		double[] results = new double[numberOfExperiments];
 		for (int i = 0; i < numberOfExperiments; i++) {
-			results[i] = hillDescent.solve(problem);
+			results[i] = hillDescent.solve(problem).getFitnessValue();
 		}
 		System.out.println(String.format("Distribution: [%s]", distribution.getClass().getSimpleName()));
 		System.out.println(new CommonMetric(results));

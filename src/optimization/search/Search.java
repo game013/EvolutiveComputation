@@ -4,6 +4,7 @@
 package optimization.search;
 
 import optimization.problem.OptimizationProblem;
+import optimization.util.type.Solution;
 
 /**
  * @author Oscar Garavito
@@ -24,6 +25,6 @@ public interface Search<D, C> {
 	 *            Function to evaluate fitness of solution.
 	 * @return Found solution.
 	 */
-	C solve(OptimizationProblem<D, C> problem);
+	Solution<D, C> solve(OptimizationProblem<D, C> problem);
 
 }

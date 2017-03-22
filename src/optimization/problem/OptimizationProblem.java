@@ -3,8 +3,8 @@
  */
 package optimization.problem;
 
-import optimization.function.Function;
-import optimization.function.Space;
+import optimization.function.fitness.Function;
+import optimization.function.space.Space;
 
 /**
  * @param <D>

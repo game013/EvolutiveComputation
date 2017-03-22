@@ -1,9 +1,12 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.function;
+package optimization.function.space;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import optimization.util.type.Solution;
 
 /**
  * @author Oscar Garavito
@@ -11,23 +14,36 @@ import java.util.List;
  *            Domain of space, same as a function.
  */
 public interface Space<D> {
-	
+
 	/**
 	 * @return
 	 */
 	D pick();
-	
+
 	/**
 	 * @param n
 	 * @return
 	 */
-	List<D> pick(int n);
+	default List<D> pick(int n) {
+
+		List<D> elements = new ArrayList<>(n);
+		for (int i = 0; i < n; i++) {
+			elements.add(this.pick());
+		}
+		return elements;
+	}
 
 	/**
 	 * @param data
 	 * @return
 	 */
 	D repair(D data);
+	
+	default D repair(Solution<D, ?> solution) {
+		
+		D data = solution.getSolution();
+		return repair(data);
+	}
 
 	/**
 	 * Get lower bound of space.
@@ -42,5 +58,12 @@ public interface Space<D> {
 	 * @return
 	 */
 	D getUpperBound();
+
+	/**
+	 * Gets the dimension size of the space.
+	 * 
+	 * @return
+	 */
+	int getDimension();
 
 }

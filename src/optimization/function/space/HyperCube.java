@@ -1,10 +1,7 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.function;
-
-import java.util.ArrayList;
-import java.util.List;
+package optimization.function.space;
 
 /**
  * @author Oscar Garavito
@@ -91,14 +88,14 @@ public class HyperCube implements Space<double[]> {
 		return this.upperBound;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see optimization.function.space.Space#getDimension()
+	 */
 	@Override
-	public List<double[]> pick(int n) {
+	public int getDimension() {
 
-		List<double[]> elements = new ArrayList<>(n);
-		for (int i = 0; i < n; i++) {
-			elements.set(i, this.pick());
-		}
-		return elements;
+		return this.dimension;
 	}
 
 }

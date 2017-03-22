@@ -5,7 +5,8 @@ package optimization.genetic.operator;
 
 import java.util.List;
 
-import optimization.function.Function;
+import optimization.function.fitness.Function;
+import optimization.function.space.Space;
 import optimization.util.type.Solution;
 
 /**
@@ -23,8 +24,10 @@ public interface GeneticOperator<D, C> {
 	 * @param fitnessFunction
 	 *            Fitness function to apply selective pressure over its
 	 *            descendant.
+	 * @param space
+	 *            Space to repair created child.
 	 * @return List of offspring.
 	 */
-	List<Solution<D, C>> apply(List<Solution<D, C>> parents, Function<D, C> fitnessFunction);
+	List<Solution<D, C>> apply(List<Solution<D, C>> parents, Function<D, C> fitnessFunction, Space<D> space);
 
 }

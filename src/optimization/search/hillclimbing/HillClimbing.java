@@ -7,6 +7,7 @@ package optimization.search.hillclimbing;
 
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
+import optimization.util.type.Solution;
 
 /**
  *
@@ -35,7 +36,7 @@ public class HillClimbing<D, C extends Comparable<C>> implements Search<D, C> {
 	}
 
 	@Override
-	public C solve(OptimizationProblem<D, C> problem) {
+	public Solution<D, C> solve(OptimizationProblem<D, C> problem) {
 
 		D solution = problem.getSpace().pick();
 		for (int i = 0; i < this.numberOfIterations; i++) {
@@ -45,7 +46,7 @@ public class HillClimbing<D, C extends Comparable<C>> implements Search<D, C> {
 				solution = newSolution;
 			}
 		}
-		return problem.getFitnessFunction().calculate(solution);
+		return new Solution<>(solution, problem.getFitnessFunction());
 	}
 
 }

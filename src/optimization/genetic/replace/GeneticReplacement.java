@@ -5,7 +5,7 @@ package optimization.genetic.replace;
 
 import java.util.List;
 
-import optimization.function.Function;
+import optimization.function.fitness.Function;
 import optimization.util.type.Population;
 import optimization.util.type.Solution;
 
@@ -13,6 +13,7 @@ import optimization.util.type.Solution;
  * @author Oscar Garavito
  *
  */
+@FunctionalInterface
 public interface GeneticReplacement<D, C> {
 
 	/**

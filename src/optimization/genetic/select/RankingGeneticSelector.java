@@ -5,7 +5,7 @@ package optimization.genetic.select;
 
 import java.util.stream.IntStream;
 
-import optimization.function.Function;
+import optimization.function.fitness.Function;
 import optimization.util.type.Population;
 
 /**
@@ -19,7 +19,7 @@ public class RankingGeneticSelector<D, C extends Comparable<C>> extends Abstract
 	/**
 	 * @param parentsSampleSize
 	 */
-	protected RankingGeneticSelector(int parentsSampleSize) {
+	public RankingGeneticSelector(int parentsSampleSize) {
 
 		super(parentsSampleSize);
 	}
@@ -33,8 +33,8 @@ public class RankingGeneticSelector<D, C extends Comparable<C>> extends Abstract
 	protected double[] getProbabities(Population<D, C> population, Function<D, C> function) {
 
 		int[] sortedIndexes = IntStream.range(0, population.size()).boxed()
-				.sorted((i, j) -> function.calculate(population.get(i).getSolution())
-						.compareTo(function.calculate(population.get(j).getSolution())))
+				.sorted((i, j) -> population.get(i).getFitnessValue()
+						.compareTo(population.get(j).getFitnessValue()))
 				.mapToInt(Integer::valueOf).toArray();
 		int F = population.size() * (population.size() + 1) / 2;
 		double[] probabilities = new double[population.size()];

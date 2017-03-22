@@ -3,11 +3,8 @@
  */
 package optimization.genetic.select;
 
-import java.util.DoubleSummaryStatistics;
-
-import optimization.function.Function;
+import optimization.function.fitness.Function;
 import optimization.util.type.Population;
-import optimization.util.type.Solution;
 
 /**
  * @author Oscar Garavito
@@ -21,7 +18,7 @@ public class RouletteGeneticSelector<D> extends AbstractDoubleRouletteGeneticSel
 	 * @param parentsSampleSize
 	 *            Parent's sample size.
 	 */
-	protected RouletteGeneticSelector(int parentsSampleSize) {
+	public RouletteGeneticSelector(int parentsSampleSize) {
 
 		super(parentsSampleSize);
 	}
@@ -36,14 +33,14 @@ public class RouletteGeneticSelector<D> extends AbstractDoubleRouletteGeneticSel
 	@Override
 	protected double[] getProbabities(Population<D, Double> population, Function<D, Double> function) {
 
-		DoubleSummaryStatistics statistics = population.getPopulation().stream().map(Solution::getSolution)
-				.map(function::calculate).mapToDouble(Double::valueOf).summaryStatistics();
-		double quantum = 0;
-		double reference = statistics.getMax() + quantum;
-		double scale = reference * statistics.getCount() - statistics.getSum();
+		double max = Double.MIN_VALUE, sum = 0.0;
+		for (int i = 1; i < population.size(); i++) {
+			max = Math.max(max, population.get(i).getFitnessValue());
+			sum += population.get(i).getFitnessValue();
+		}
 		double[] probabilities = new double[population.size()];
 		for (int i = 0; i < population.size(); i++) {
-			probabilities[i] = (reference - function.calculate(population.get(i).getSolution())) / (quantum * scale);
+			probabilities[i] = (population.get(i).getFitnessValue()) / sum;
 		}
 		return probabilities;
 	}

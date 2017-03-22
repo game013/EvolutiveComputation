@@ -6,7 +6,7 @@ package optimization.genetic.select;
 import java.util.ArrayList;
 import java.util.List;
 
-import optimization.function.Function;
+import optimization.function.fitness.Function;
 import optimization.util.type.Population;
 import optimization.util.type.Solution;
 
@@ -34,7 +34,7 @@ public class TournamentGeneticSelector<D, C> extends AbstractGeneticSelector<D, 
 	/**
 	 * @param parentsSampleSize
 	 */
-	protected TournamentGeneticSelector(int parentsSampleSize, GeneticSelector<D, C> tournamentSelector) {
+	public TournamentGeneticSelector(int parentsSampleSize, GeneticSelector<D, C> tournamentSelector) {
 
 		super(parentsSampleSize);
 		if (tournamentSelector.getParentsSampleSize() != 1) {
