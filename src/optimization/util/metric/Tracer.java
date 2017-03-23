@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author Oscar Garavito
@@ -38,6 +39,9 @@ public class Tracer {
 	 */
 	public static void start() {
 
+		for (Entry<Class<?>, List<Object>> entry : TRACE.entrySet()) {
+			entry.getValue().clear();
+		}
 		ON = true;
 	}
 
@@ -66,6 +70,11 @@ public class Tracer {
 		if (ON && TRACE.containsKey(clazz)) {
 			TRACE.get(clazz).add(data);
 		}
+	}
+
+	public static boolean isActive(Class<?> clazz) {
+
+		return ON && TRACE.containsKey(clazz);
 	}
 
 	/**

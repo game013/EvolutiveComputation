@@ -13,7 +13,7 @@ import optimization.genetic.replace.GeneticReplacement;
 import optimization.genetic.select.GeneticSelector;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
-import optimization.util.metric.PerformanceMetric;
+import optimization.util.goal.Goal;
 import optimization.util.metric.Tracer;
 import optimization.util.type.Population;
 import optimization.util.type.Solution;
@@ -61,12 +61,13 @@ public class GeneticAlgorithm<D, C extends Comparable<C>> implements Search<D, C
 
 		Population<D, C> population = this.loadFirstPopulation(problem);
 		Tracer.trace(population.getClass(), population);
-		PerformanceMetric metric = PerformanceMetric.getInstance();
 		for (int i = 0; i < this.numberOfIterations; i++) {
 			population = this.nextPopulation(population, problem.getFitnessFunction(), problem.getSpace());
 			Tracer.trace(population.getClass(), population);
+			if (Tracer.isActive(Solution.class)) {
+				Tracer.trace(Solution.class, Goal.getBestFromPopulation(population));
+			}
 		}
-		metric.finish();
 		return population.getPopulation().stream()
 				.sorted((s1, s2) -> s2.getFitnessValue().compareTo(s1.getFitnessValue())).findFirst().orElse(null);
 	}

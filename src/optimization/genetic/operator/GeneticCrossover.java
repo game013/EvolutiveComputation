@@ -23,10 +23,13 @@ public interface GeneticCrossover<D, C> {
 	 *            Parents to be crossed.
 	 * @param fitnessFunction
 	 *            Function to calculate fitness.
+	 * @param mutator
+	 *            Mutator to be applied.
 	 * @param space
 	 *            Space to repair solution.
 	 * @return List of offspring.
 	 */
-	List<Solution<D, C>> xover(List<Solution<D, C>> parents, Function<D, C> fitnessFunction, Space<D> space);
+	List<Solution<D, C>> xover(List<Solution<D, C>> parents, Function<D, C> fitnessFunction,
+			GeneticMutator<D, C> mutator, Space<D> space);
 
 }

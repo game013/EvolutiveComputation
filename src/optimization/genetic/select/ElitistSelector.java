@@ -89,7 +89,7 @@ public class ElitistSelector<D, C extends Comparable<C>> extends AbstractGenetic
 		List<Solution<D, C>> selectedParents = new ArrayList<>();
 		List<Solution<D, C>> orderedPopulation = new ArrayList<>(population.getPopulation());
 		Collections.sort(orderedPopulation, (s1, s2) -> s2.getFitnessValue().compareTo(s1.getFitnessValue()));
-		int elite = (int) Math.floor(this.eliteRate * population.getSize());
+		int elite = (int) Math.ceil(this.eliteRate * population.getSize());
 		int eliteAndMedianClass = (int) Math.floor((1.0 - this.cullRate) * population.getSize());
 		for (int i = 0; i < this.parentsSampleSize; i += 2) {
 			selectedParents.add(orderedPopulation.get(random.nextInt(elite)));

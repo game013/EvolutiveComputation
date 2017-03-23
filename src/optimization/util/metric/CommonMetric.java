@@ -3,6 +3,8 @@
  */
 package optimization.util.metric;
 
+import java.util.List;
+
 /**
  * @author Estudiante
  *
@@ -22,6 +24,18 @@ public class CommonMetric {
 	public CommonMetric(double[] results) {
 
 		this.results = results;
+		this.average = calculateAverage();
+		this.median = calculateMedian();
+		this.standardDeviationAverage = calculateStandardDeviation(true);
+		this.standardDeviationMedian = calculateStandardDeviation(false);
+	}
+
+	public CommonMetric(List<Double> results) {
+
+		this.results = new double[results.size()];
+		for (int i = 0; i < results.size(); i++) {
+			this.results[i] = results.get(i);
+		}
 		this.average = calculateAverage();
 		this.median = calculateMedian();
 		this.standardDeviationAverage = calculateStandardDeviation(true);

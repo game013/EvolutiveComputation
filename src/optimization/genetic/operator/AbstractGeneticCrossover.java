@@ -80,21 +80,27 @@ public abstract class AbstractGeneticCrossover<D, C> implements GeneticCrossover
 	 * (non-Javadoc)
 	 * @see optimization.genetic.operator.GeneticCrossover#xover(java.util.List,
 	 * optimization.function.fitness.Function,
+	 * optimization.genetic.operator.GeneticMutator,
 	 * optimization.function.space.Space)
 	 */
 	@Override
-	public List<Solution<D, C>> xover(List<Solution<D, C>> parents, Function<D, C> fitnessFunction, Space<D> space) {
+	public List<Solution<D, C>> xover(List<Solution<D, C>> parents, Function<D, C> fitnessFunction,
+			GeneticMutator<D, C> mutator, Space<D> space) {
 
 		List<Solution<D, C>> offspring = new ArrayList<>(parents.size());
 		for (int i = 0; i < parents.size(); i += 2) {
-			Pair<D, D> children;
 			if (Math.random() < this.xoverProbability) {
+				Pair<D, D> children;
 				children = xover(new Pair<>(parents.get(i), parents.get(i + 1)), fitnessFunction, space);
+
+				D mutatedChild1 = space.repair(mutator.mutate(children.getLeft(), fitnessFunction, space));
+				D mutatedChild2 = space.repair(mutator.mutate(children.getRight(), fitnessFunction, space));
+				offspring.add(new Solution<>(mutatedChild1, fitnessFunction));
+				offspring.add(new Solution<>(mutatedChild2, fitnessFunction));
 			} else {
-				children = new Pair<>(parents.get(i).getSolution(), parents.get(i + 1).getSolution());
+				offspring.add(parents.get(i));
+				offspring.add(parents.get(i + 1));
 			}
-			offspring.add(new Solution<>(space.repair(children.getLeft()), fitnessFunction));
-			offspring.add(new Solution<>(space.repair(children.getRight()), fitnessFunction));
 		}
 		return offspring;
 	}

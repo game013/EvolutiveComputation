@@ -17,6 +17,7 @@ import optimization.function.fitness.KnapsackFitness;
 import optimization.function.space.BitSetSpace;
 import optimization.function.space.Space;
 import optimization.genetic.operator.BinaryCrossover;
+import optimization.genetic.operator.BitCrossover;
 import optimization.genetic.operator.BitMutator;
 import optimization.genetic.operator.CustomGeneticOperator;
 import optimization.genetic.operator.GeneticCrossover;
@@ -49,7 +50,7 @@ public class KnapsackProblemDemo {
 
 	private static final int POP_SIZE = 100;
 
-	private static final int NUM_ITER = 1_000;
+	private static final int NUM_ITER = 100_000;
 
 	private double capacity;
 
@@ -61,11 +62,12 @@ public class KnapsackProblemDemo {
 
 	public static void main(String... args) {
 
-		KnapsackProblemDemo demo = new KnapsackProblemDemo("resources/testSmall.properties");
+		KnapsackProblemDemo demo = new KnapsackProblemDemo("resources/test1_000Elements.properties");
 		// demo.runGenerational();
 		// demo.runTournamentGenerationalStableState();
 		// demo.runElitistGenerational();
-		demo.runElitistFlipMutationGenerationalStableState();
+		// demo.runElitistFlipMutationGenerationalStableState();
+		demo.run30();
 	}
 
 	/**
@@ -98,11 +100,11 @@ public class KnapsackProblemDemo {
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",
-				calculateSolution(foundSolution.getSolution()), foundSolution.getSolution()));
+				knapsackFitnessFunction.calculate(foundSolution.getSolution()), foundSolution.getSolution()));
 
 		BitSet optimalBitSet = parseOptimalBitSet();
-		System.out.println(
-				String.format("Optimal solution: %f, bitset: %s", calculateSolution(optimalBitSet), optimalBitSet));
+		System.out.println(String.format("Optimal solution: %f, bitset: %s",
+				knapsackFitnessFunction.calculate(optimalBitSet), optimalBitSet));
 		KnapsackMetric metric = new KnapsackMetric();
 		metric.putDataOfBestInFile(1);
 	}
@@ -128,11 +130,11 @@ public class KnapsackProblemDemo {
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",
-				calculateSolution(foundSolution.getSolution()), foundSolution.getSolution()));
+				knapsackFitnessFunction.calculate(foundSolution.getSolution()), foundSolution.getSolution()));
 
 		BitSet optimalBitSet = parseOptimalBitSet();
-		System.out.println(
-				String.format("Optimal solution: %f, bitset: %s", calculateSolution(optimalBitSet), optimalBitSet));
+		System.out.println(String.format("Optimal solution: %f, bitset: %s",
+				knapsackFitnessFunction.calculate(optimalBitSet), optimalBitSet));
 		KnapsackMetric metric = new KnapsackMetric();
 		metric.putDataOfBestInFile(1);
 	}
@@ -156,13 +158,25 @@ public class KnapsackProblemDemo {
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",
-				calculateSolution(foundSolution.getSolution()), foundSolution.getSolution()));
+				knapsackFitnessFunction.calculate(foundSolution.getSolution()), foundSolution.getSolution()));
 
 		BitSet optimalBitSet = parseOptimalBitSet();
-		System.out.println(
-				String.format("Optimal solution: %f, bitset: %s", calculateSolution(optimalBitSet), optimalBitSet));
+		System.out.println(String.format("Optimal solution: %f, bitset: %s",
+				knapsackFitnessFunction.calculate(optimalBitSet), optimalBitSet));
 		KnapsackMetric metric = new KnapsackMetric();
 		metric.putDataOfBestInFile(1);
+	}
+
+	public void run30() {
+
+		Tracer.add(Solution.class);
+		for (int i = 1; i <= 30; i++) {
+			System.out.println("Iteration: " + i);
+			Tracer.start();
+			runElitistFlipMutationGenerationalStableState();
+			KnapsackMetric metric = new KnapsackMetric();
+			metric.putDataOfBestInFile(i);
+		}
 	}
 
 	public void runElitistFlipMutationGenerationalStableState() {
@@ -172,12 +186,10 @@ public class KnapsackProblemDemo {
 		Space<BitSet> space = new BitSetSpace(weights.length);
 
 		GeneticSelector<BitSet, Double> elitistSelector = new ElitistSelector<>(POP_SIZE);
-		GeneticCrossover<BitSet, Double> crossover = new BinaryCrossover<>(0.9);
+		GeneticCrossover<BitSet, Double> crossover = new BitCrossover<>(0.9);
 		GeneticMutator<BitSet, Double> mutator = new BitMutator<>();
 		GeneticOperator<BitSet, Double> geneticOperator = new CustomGeneticOperator<>(crossover, mutator);
 		GeneticReplacement<BitSet, Double> replacement = new GenerationalStableStateReplacement<>();
-		Tracer.add(Population.class);
-		// Tracer.start();
 
 		Search<BitSet, Double> search = new GeneticAlgorithm<>(POP_SIZE, NUM_ITER, elitistSelector, geneticOperator,
 				replacement);
@@ -185,13 +197,10 @@ public class KnapsackProblemDemo {
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",
-				calculateSolution(foundSolution.getSolution()), foundSolution.getSolution()));
+				knapsackFitnessFunction.calculate(foundSolution.getSolution()), foundSolution.getSolution()));
 		BitSet optimalBitSet = parseOptimalBitSet();
-		System.out.println(
-				String.format("Optimal solution: %f, bitset: %s", calculateSolution(optimalBitSet), optimalBitSet));
-
-		// KnapsackMetric metric = new KnapsackMetric();
-		// metric.putDataOfBestInFile(1);
+		System.out.println(String.format("Optimal solution: %f, bitset: %s",
+				knapsackFitnessFunction.calculate(optimalBitSet), optimalBitSet));
 	}
 
 	/**
@@ -234,17 +243,6 @@ public class KnapsackProblemDemo {
 			elements.add(new KnapsackElement(weights[i], values[i]));
 		}
 		return elements;
-	}
-
-	private double calculateSolution(BitSet solution) {
-
-		double result = 0;
-		for (int i = 0; i < solution.length(); i++) {
-			if (solution.get(i)) {
-				result += values[i];
-			}
-		}
-		return result;
 	}
 
 	private BitSet parseOptimalBitSet() {

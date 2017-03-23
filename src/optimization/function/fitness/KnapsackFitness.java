@@ -36,15 +36,39 @@ public class KnapsackFitness implements Function<BitSet, Double> {
 		this.elements = elements;
 	}
 
-	@Override
-	public Double calculate(BitSet t) {
+	/*
+	 * (non-Javadoc)
+	 * @see optimization.function.fitness.Function#calculate(java.lang.Object)
+	 */
+	//@Override
+	public Double calculateOld(BitSet t) {
 
 		double value = 0, weight = 0;
-		int maxIndex = Math.min(t.length(), this.elements.size());
-		for (int i = 0; i < maxIndex; i++) {
+		for (int i = 0; i < this.elements.size(); i++) {
 			if(t.get(i)) {
 				value += this.elements.get(i).getValue();
 				weight += this.elements.get(i).getWeight();
+				if (weight > this.knapsackCapacity) {
+					break;
+				}
+			}
+		}
+		if (weight > this.knapsackCapacity) {
+			value = 1 / (weight - this.knapsackCapacity);
+		}
+		return value;
+	}
+	public Double calculate(BitSet t) {
+
+		double value = 0, weight = 0;
+		for (int i = t.nextSetBit(0); i >= 0; i = t.nextSetBit(i + 1)) {
+			if (i == Integer.MAX_VALUE) {
+				break; // or (i+1) would overflow
+			}
+			value += this.elements.get(i).getValue();
+			weight += this.elements.get(i).getWeight();
+			if (weight > this.knapsackCapacity) {
+				break;
 			}
 		}
 		if (weight > this.knapsackCapacity) {

@@ -8,7 +8,6 @@ import java.util.Random;
 
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
-import optimization.util.type.Solution;
 
 /**
  * Flips a random bit of solution.
@@ -31,9 +30,9 @@ public class BitMutator<C> implements GeneticMutator<BitSet, C> {
 	 * optimization.function.space.Space)
 	 */
 	@Override
-	public BitSet mutate(Solution<BitSet, C> child, Function<BitSet, C> fitnessFunction, Space<BitSet> space) {
+	public BitSet mutate(BitSet child, Function<BitSet, C> fitnessFunction, Space<BitSet> space) {
 
-		BitSet newChild = (BitSet) child.getSolution().clone();
+		BitSet newChild = (BitSet) child.clone();
 		newChild.flip(RANDOM.nextInt(space.getDimension()));
 		return newChild;
 	}

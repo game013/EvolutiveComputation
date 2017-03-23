@@ -37,17 +37,6 @@ public class CustomGeneticOperator<D, C> implements GeneticOperator<D, C> {
 	}
 
 	/**
-	 * Creates a genetic operator without crossover.
-	 * 
-	 * @param mutator
-	 *            Mutation operator.
-	 */
-	public CustomGeneticOperator(GeneticMutator<D, C> mutator) {
-
-		this((parents, fitnessFunction, space) -> parents, mutator);
-	}
-
-	/**
 	 * Creates a genetic operator with given crossover and mutator.
 	 * 
 	 * @param crossover
@@ -70,8 +59,7 @@ public class CustomGeneticOperator<D, C> implements GeneticOperator<D, C> {
 	@Override
 	public List<Solution<D, C>> apply(List<Solution<D, C>> parents, Function<D, C> fitnessFunction, Space<D> space) {
 
-		List<Solution<D, C>> offspring = crossover.xover(parents, fitnessFunction, space);
-		return mutator.mutate(offspring, fitnessFunction, space);
+		return crossover.xover(parents, fitnessFunction, mutator, space);
 	}
 
 }
