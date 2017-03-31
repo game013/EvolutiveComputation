@@ -56,7 +56,7 @@ public class KnapsackPlotDemo extends ApplicationFrame {
 
 		double[][] data = new double[rows][numberOfFiles];
 		for (int i = 1; i <= numberOfFiles; i++) {
-			try (Scanner scanner = new Scanner(new FileInputStream(String.format("/tmp/bests_%d.csv", i)))) {
+			try (Scanner scanner = new Scanner(new FileInputStream(String.format("/tmp/big/bests_%d.csv", i)))) {
 				for (int j = 0; j < rows; j++) {
 					data[j][i - 1] = scanner.nextDouble();
 				}
@@ -121,9 +121,10 @@ public class KnapsackPlotDemo extends ApplicationFrame {
 
 		// change the auto tick unit selection to integer units only...
 		NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-		//yAxis.setAutoRangeIncludesZero(false);
+		// yAxis.setAutoRangeIncludesZero(false);
 		yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		yAxis.setRange(0, 700_000);
+		//yAxis.setRange(13_160_000, 13_560_000);
 
 		return chart;
 	}

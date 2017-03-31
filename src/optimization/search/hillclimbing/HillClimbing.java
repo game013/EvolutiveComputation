@@ -5,6 +5,8 @@
  */
 package optimization.search.hillclimbing;
 
+import optimization.genetic.operator.GeneticMutator;
+import optimization.genetic.operator.MutatorAdapter;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
 import optimization.util.type.Solution;
@@ -23,16 +25,32 @@ public class HillClimbing<D, C extends Comparable<C>> implements Search<D, C> {
 	/**
 	 * Mutation process.
 	 */
-	private final Mutation<D> mutation;
+	private GeneticMutator<D, C> mutator;
+
+	/**
+	 * Mutator adapter.
+	 */
+	private final MutatorAdapter<D, C> mutatorAdapter;
 
 	/**
 	 * @param numberOfIterations
-	 * @param mutation
+	 * @param mutator
 	 */
-	public HillClimbing(int numberOfIterations, Mutation<D> mutation) {
+	public HillClimbing(int numberOfIterations, GeneticMutator<D, C> mutator) {
+
+		this(numberOfIterations, mutator, (m, b) -> m);
+	}
+
+	/**
+	 * @param numberOfIterations
+	 * @param mutator
+	 * @param mutatorAdapter
+	 */
+	public HillClimbing(int numberOfIterations, GeneticMutator<D, C> mutator, MutatorAdapter<D, C> mutatorAdapter) {
 
 		this.numberOfIterations = numberOfIterations;
-		this.mutation = mutation;
+		this.mutator = mutator;
+		this.mutatorAdapter = mutatorAdapter;
 	}
 
 	@Override
@@ -40,13 +58,24 @@ public class HillClimbing<D, C extends Comparable<C>> implements Search<D, C> {
 
 		D solution = problem.getSpace().pick();
 		for (int i = 0; i < this.numberOfIterations; i++) {
-			D newSolution = problem.getSpace().repair(this.mutation.mutate(solution));
+			D newSolution = problem.getSpace()
+					.repair(this.mutator.mutate(solution, problem.getFitnessFunction(), problem.getSpace()));
+			boolean wasLastBetter = false;
 			if (problem.getFitnessFunction().calculate(newSolution)
 					.compareTo(problem.getFitnessFunction().calculate(solution)) <= 0) {
+				wasLastBetter = true;
 				solution = newSolution;
 			}
+			this.mutator = this.mutatorAdapter.adaptMutator(this.mutator, wasLastBetter);
 		}
 		return new Solution<>(solution, problem.getFitnessFunction());
+	}
+
+	/**
+	 * @return the mutator
+	 */
+	public GeneticMutator<D, C> getMutator() {
+		return mutator;
 	}
 
 }

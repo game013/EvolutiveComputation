@@ -62,7 +62,7 @@ public class KnapsackProblemDemo {
 
 	public static void main(String... args) {
 
-		KnapsackProblemDemo demo = new KnapsackProblemDemo("resources/test1_000Elements.properties");
+		KnapsackProblemDemo demo = new KnapsackProblemDemo("resources/test24Elements.properties");
 		// demo.runGenerational();
 		// demo.runTournamentGenerationalStableState();
 		// demo.runElitistGenerational();
