@@ -4,6 +4,7 @@
 package demo;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Optional;
 
 import optimization.distribution.Distribution;
@@ -33,7 +34,7 @@ public class HillClimbingDemo {
 	public static void main(String[] args) {
 
 		int dimension = 10;
-		int numberOfIterations = 10_000;
+		int numberOfIterations = 100_000;
 		// run(new ParetoDistribution(0.9, 0.00055), dimension,
 		// numberOfIterations);
 		// System.out.println("***************************************");
@@ -69,7 +70,8 @@ public class HillClimbingDemo {
 		} else {
 			hillDescent = new HillClimbing<>(numberOfIterations, mutation);
 		}
-		OptimizationProblem<double[], Double> problem = new OptimizationProblem<>(space, rastrigin);
+		OptimizationProblem<double[], Double> problem = new OptimizationProblem<>(space, rastrigin,
+				Comparator.reverseOrder());
 		int numberOfExperiments = 30;
 		double[] results = new double[numberOfExperiments];
 		for (int i = 0; i < numberOfExperiments; i++) {

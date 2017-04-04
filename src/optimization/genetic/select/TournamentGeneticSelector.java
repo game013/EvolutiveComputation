@@ -4,6 +4,7 @@
 package optimization.genetic.select;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import optimization.function.fitness.Function;
@@ -47,15 +48,16 @@ public class TournamentGeneticSelector<D, C> extends AbstractGeneticSelector<D, 
 	/*
 	 * (non-Javadoc)
 	 * @see
-	 * optimization.genetic.select.GeneticSelector#selectParent(java.util.List,
-	 * optimization.function.Function)
+	 * optimization.genetic.select.GeneticSelector#selectParent(optimization.
+	 * util.type.Population, optimization.function.fitness.Function,
+	 * java.util.Comparator)
 	 */
 	@Override
-	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> function) {
+	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> function, Comparator<C> goal) {
 
 		List<Solution<D, C>> selectedParents = new ArrayList<>();
 		for (int i = 0; i < super.parentsSampleSize; i++) {
-			selectedParents.add(playTournament(population, function));
+			selectedParents.add(playTournament(population, function, goal));
 		}
 		return selectedParents;
 	}
@@ -65,17 +67,18 @@ public class TournamentGeneticSelector<D, C> extends AbstractGeneticSelector<D, 
 	 * 
 	 * @param population
 	 * @param function
+	 * @param goal
 	 * @return Winner of the tournament.
 	 */
-	private Solution<D, C> playTournament(Population<D, C> population, Function<D, C> function) {
+	private Solution<D, C> playTournament(Population<D, C> population, Function<D, C> function, Comparator<C> goal) {
 
-		List<Solution<D, C>> tournamentCompetitors = this.uniformSelector.selectParent(population, function);
+		List<Solution<D, C>> tournamentCompetitors = this.uniformSelector.selectParent(population, function, goal);
 		int size = TOURNAMENT_SIZE;
 		while (size > 1) {
 			List<Solution<D, C>> newParentList = new ArrayList<>();
 			for (int i = 0; i < size; i += 2) {
 				newParentList.addAll(this.tournamentSelector
-						.selectParent(new Population<>(tournamentCompetitors.subList(i, i + 1)), function));
+						.selectParent(new Population<>(tournamentCompetitors.subList(i, i + 1)), function, goal));
 			}
 			size /= 2;
 			tournamentCompetitors = newParentList;

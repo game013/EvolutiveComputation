@@ -3,6 +3,8 @@
  */
 package optimization.problem;
 
+import java.util.Comparator;
+
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
 
@@ -27,13 +29,20 @@ public class OptimizationProblem<D, C> {
 	private final Function<D, C> fitnessFunction;
 
 	/**
+	 * Goal of function.
+	 */
+	private final Comparator<C> goal;
+
+	/**
 	 * @param space
 	 * @param fitnessFunction
+	 * @param goal
 	 */
-	public OptimizationProblem(Space<D> space, Function<D, C> fitnessFunction) {
+	public OptimizationProblem(Space<D> space, Function<D, C> fitnessFunction, Comparator<C> goal) {
 
 		this.space = space;
 		this.fitnessFunction = fitnessFunction;
+		this.goal = goal;
 	}
 
 	/**
@@ -50,6 +59,13 @@ public class OptimizationProblem<D, C> {
 	public Function<D, C> getFitnessFunction() {
 
 		return this.fitnessFunction;
+	}
+
+	/**
+	 * @return the goal
+	 */
+	public Comparator<C> getGoal() {
+		return goal;
 	}
 
 }

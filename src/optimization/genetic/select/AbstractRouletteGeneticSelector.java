@@ -4,6 +4,7 @@
 package optimization.genetic.select;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import optimization.function.fitness.Function;
@@ -16,7 +17,8 @@ import roulette.RouletteAcumulated;
  *
  */
 public abstract class AbstractRouletteGeneticSelector<D, C> extends AbstractGeneticSelector<D, C>
-		implements GeneticSelector<D, C> {
+		implements
+			GeneticSelector<D, C> {
 
 	/**
 	 * Constructor with given parent's sample size parameter.
@@ -32,13 +34,14 @@ public abstract class AbstractRouletteGeneticSelector<D, C> extends AbstractGene
 	/*
 	 * (non-Javadoc)
 	 * @see
-	 * optimization.genetic.select.GeneticSelector#selectParent(java.util.List,
-	 * optimization.function.Function)
+	 * optimization.genetic.select.GeneticSelector#selectParent(optimization.
+	 * util.type.Population, optimization.function.fitness.Function,
+	 * java.util.Comparator)
 	 */
 	@Override
-	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> function) {
+	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> function, Comparator<C> goal) {
 
-		RouletteAcumulated roulette = new RouletteAcumulated(getProbabities(population, function));
+		RouletteAcumulated roulette = new RouletteAcumulated(getProbabities(population, function, goal));
 		List<Solution<D, C>> result = new ArrayList<>(this.parentsSampleSize);
 		for (int i = 0; i < this.parentsSampleSize; i++) {
 			result.add(population.get(roulette.nextRandom()));
@@ -51,8 +54,10 @@ public abstract class AbstractRouletteGeneticSelector<D, C> extends AbstractGene
 	 * 
 	 * @param population
 	 * @param function
+	 * @param goal
 	 * @return
 	 */
-	protected abstract double[] getProbabities(Population<D, C> population, Function<D, C> function);
+	protected abstract double[] getProbabities(Population<D, C> population, Function<D, C> function,
+			Comparator<C> goal);
 
 }

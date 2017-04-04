@@ -3,6 +3,8 @@
  */
 package optimization.util.type;
 
+import java.util.Optional;
+
 import optimization.function.fitness.Function;
 
 /**
@@ -22,6 +24,11 @@ public class Solution<D, C> {
 	private final C fitnessValue;
 
 	/**
+	 * Parameters associated to current solution.
+	 */
+	private final Optional<SolutionParameter> parameters;
+
+	/**
 	 * @param solution
 	 * @param fitnessFunction
 	 */
@@ -36,8 +43,29 @@ public class Solution<D, C> {
 	 */
 	public Solution(D solution, C fitnessValue) {
 
+		this(solution, fitnessValue, Optional.empty());
+	}
+
+	/**
+	 * @param solution
+	 * @param fitnessValue
+	 * @param parameters
+	 */
+	public Solution(D solution, C fitnessValue, SolutionParameter parameters) {
+
+		this(solution, fitnessValue, Optional.ofNullable(parameters));
+	}
+
+	/**
+	 * @param solution
+	 * @param fitnessValue
+	 * @param parameters
+	 */
+	public Solution(D solution, C fitnessValue, Optional<SolutionParameter> parameters) {
+
 		this.solution = solution;
 		this.fitnessValue = fitnessValue;
+		this.parameters = parameters;
 	}
 
 	/**
@@ -54,10 +82,24 @@ public class Solution<D, C> {
 		return fitnessValue;
 	}
 
+	/**
+	 * @return the parameters
+	 */
+	public Optional<SolutionParameter> getParameters() {
+		return parameters;
+	}
+
 	@Override
 	public String toString() {
 
-		return String.format("%s -> %s", this.getSolution().toString(), this.getFitnessValue().toString());
+		String strRep;
+		if (this.parameters.isPresent()) {
+			strRep = String.format("%s -> %s (parameters: %s)", this.getSolution().toString(),
+					this.getFitnessValue().toString(), this.parameters.get());
+		} else {
+			strRep = String.format("%s -> %s", this.getSolution().toString(), this.getFitnessValue().toString());
+		}
+		return strRep;
 	}
 
 }

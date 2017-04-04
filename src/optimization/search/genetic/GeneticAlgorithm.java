@@ -4,6 +4,7 @@
 package optimization.search.genetic;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import optimization.function.fitness.Function;
@@ -62,14 +63,14 @@ public class GeneticAlgorithm<D, C extends Comparable<C>> implements Search<D, C
 		Population<D, C> population = this.loadFirstPopulation(problem);
 		Tracer.trace(population.getClass(), population);
 		for (int i = 0; i < this.numberOfIterations; i++) {
-			population = this.nextPopulation(population, problem.getFitnessFunction(), problem.getSpace());
+			population = this.nextPopulation(population, problem.getFitnessFunction(), problem.getSpace(),
+					problem.getGoal());
 			Tracer.trace(population.getClass(), population);
 			if (Tracer.isActive(Solution.class)) {
-				Tracer.trace(Solution.class, Goal.getBestFromPopulation(population));
+				Tracer.trace(Solution.class, Goal.getBestFromPopulation(population, problem.getGoal()));
 			}
 		}
-		return population.getPopulation().stream()
-				.sorted((s1, s2) -> s2.getFitnessValue().compareTo(s1.getFitnessValue())).findFirst().orElse(null);
+		return Goal.getBestFromPopulation(population, problem.getGoal());
 	}
 
 	private Population<D, C> loadFirstPopulation(OptimizationProblem<D, C> problem) {
@@ -83,12 +84,12 @@ public class GeneticAlgorithm<D, C extends Comparable<C>> implements Search<D, C
 		return population;
 	}
 
-	private Population<D, C> nextPopulation(Population<D, C> population, Function<D, C> fitnessFunction,
-			Space<D> space) {
+	private Population<D, C> nextPopulation(Population<D, C> population, Function<D, C> fitnessFunction, Space<D> space,
+			Comparator<C> goal) {
 
-		List<Solution<D, C>> parents = selector.selectParent(population, fitnessFunction);
+		List<Solution<D, C>> parents = selector.selectParent(population, fitnessFunction, goal);
 		List<Solution<D, C>> offspring = this.geneticOperator.apply(parents, fitnessFunction, space);
-		return this.replacement.apply(population, offspring, fitnessFunction);
+		return this.replacement.apply(population, offspring, fitnessFunction, goal);
 	}
 
 }

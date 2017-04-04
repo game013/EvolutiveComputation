@@ -79,8 +79,8 @@ public class KnapsackPlotDemo extends ApplicationFrame {
 			CommonMetric metric = new CommonMetric(data[i]);
 			try {
 				value = value + Math.random() - 0.5;
-				series.add(i, metric.getAverage(), metric.getAverage() + metric.getStandardDeviationAverage(),
-						metric.getAverage() - metric.getStandardDeviationAverage());
+				series.add(i, metric.getAverage(), metric.getAverage() + metric.getStandardDeviationMedian(),
+						metric.getAverage() - metric.getStandardDeviationMedian());
 			} catch (SeriesException e) {
 				System.err.println("Error adding to series");
 			}
@@ -124,7 +124,7 @@ public class KnapsackPlotDemo extends ApplicationFrame {
 		// yAxis.setAutoRangeIncludesZero(false);
 		yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		yAxis.setRange(0, 700_000);
-		//yAxis.setRange(13_160_000, 13_560_000);
+		// yAxis.setRange(13_160_000, 13_560_000);
 
 		return chart;
 	}

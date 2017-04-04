@@ -3,6 +3,7 @@
  */
 package optimization.util.metric;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,25 +22,25 @@ public class CommonMetric {
 
 	private final double standardDeviationMedian;
 
+	private final double max;
+
+	private final double min;
+
 	public CommonMetric(double[] results) {
 
 		this.results = results;
+		Arrays.sort(this.results);
 		this.average = calculateAverage();
 		this.median = calculateMedian();
 		this.standardDeviationAverage = calculateStandardDeviation(true);
 		this.standardDeviationMedian = calculateStandardDeviation(false);
+		this.max = this.results[this.results.length - 1];
+		this.min = this.results[0];
 	}
 
 	public CommonMetric(List<Double> results) {
 
-		this.results = new double[results.size()];
-		for (int i = 0; i < results.size(); i++) {
-			this.results[i] = results.get(i);
-		}
-		this.average = calculateAverage();
-		this.median = calculateMedian();
-		this.standardDeviationAverage = calculateStandardDeviation(true);
-		this.standardDeviationMedian = calculateStandardDeviation(false);
+		this(results.stream().mapToDouble(d -> d).toArray());
 	}
 
 	private double calculateAverage() {
@@ -94,6 +95,20 @@ public class CommonMetric {
 
 	public double getStandardDeviationMedian() {
 		return standardDeviationMedian;
+	}
+
+	/**
+	 * @return the max
+	 */
+	public double getMax() {
+		return max;
+	}
+
+	/**
+	 * @return the min
+	 */
+	public double getMin() {
+		return min;
 	}
 
 	@Override

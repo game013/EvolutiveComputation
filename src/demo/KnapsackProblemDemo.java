@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -96,7 +97,8 @@ public class KnapsackProblemDemo {
 
 		Search<BitSet, Double> search = new GeneticAlgorithm<>(POP_SIZE, NUM_ITER, rouletteSelector, geneticOperator,
 				replacement);
-		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction);
+		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction,
+				Comparator.reverseOrder());
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",
@@ -126,7 +128,8 @@ public class KnapsackProblemDemo {
 
 		Search<BitSet, Double> search = new GeneticAlgorithm<>(POP_SIZE, NUM_ITER, tournamentSelector, geneticOperator,
 				replacement);
-		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction);
+		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction,
+				Comparator.reverseOrder());
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",
@@ -154,7 +157,8 @@ public class KnapsackProblemDemo {
 
 		Search<BitSet, Double> search = new GeneticAlgorithm<>(POP_SIZE, NUM_ITER, elitistSelector, geneticOperator,
 				replacement);
-		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction);
+		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction,
+				Comparator.reverseOrder());
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",
@@ -193,7 +197,8 @@ public class KnapsackProblemDemo {
 
 		Search<BitSet, Double> search = new GeneticAlgorithm<>(POP_SIZE, NUM_ITER, elitistSelector, geneticOperator,
 				replacement);
-		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction);
+		OptimizationProblem<BitSet, Double> problem = new OptimizationProblem<>(space, knapsackFitnessFunction,
+				Comparator.reverseOrder());
 		Solution<BitSet, Double> foundSolution = search.solve(problem);
 
 		System.out.println(String.format("Best found solution: %f, bitset: %s",

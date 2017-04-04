@@ -3,6 +3,8 @@
  */
 package optimization.genetic.select;
 
+import java.util.Comparator;
+
 import optimization.function.fitness.Function;
 import optimization.util.type.Population;
 
@@ -23,15 +25,15 @@ public class RouletteGeneticSelector<D> extends AbstractDoubleRouletteGeneticSel
 		super(parentsSampleSize);
 	}
 
-	/**
-	 * Function that calculates probabilities for each individual in population.
-	 * 
-	 * @param population
-	 * @param function
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see optimization.genetic.select.AbstractDoubleRouletteGeneticSelector#
+	 * getProbabities(optimization.util.type.Population,
+	 * optimization.function.fitness.Function, java.util.Comparator)
 	 */
 	@Override
-	protected double[] getProbabities(Population<D, Double> population, Function<D, Double> function) {
+	protected double[] getProbabities(Population<D, Double> population, Function<D, Double> function,
+			Comparator<Double> goal) {
 
 		double max = Double.MIN_VALUE, sum = 0.0;
 		for (int i = 1; i < population.size(); i++) {

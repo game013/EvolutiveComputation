@@ -3,6 +3,7 @@
  */
 package optimization.genetic.replace;
 
+import java.util.Comparator;
 import java.util.List;
 
 import optimization.function.fitness.Function;
@@ -25,8 +26,11 @@ public interface GeneticReplacement<D, C> {
 	 *            Obtained offspring.
 	 * @param fitnessFunction
 	 *            Fitness function to apply selective pressure.
+	 * @param goal
+	 *            Comparator to be used to compare solutions.
 	 * @return New replaced population.
 	 */
-	Population<D, C> apply(Population<D, C> population, List<Solution<D, C>> offspring, Function<D, C> fitnessFunction);
+	Population<D, C> apply(Population<D, C> population, List<Solution<D, C>> offspring, Function<D, C> fitnessFunction,
+			Comparator<C> goal);
 
 }

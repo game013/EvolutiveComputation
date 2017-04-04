@@ -3,6 +3,7 @@
  */
 package optimization.genetic.replace;
 
+import java.util.Comparator;
 import java.util.List;
 
 import optimization.function.fitness.Function;
@@ -23,7 +24,7 @@ public class GenerationalReplacement<D, C> implements GeneticReplacement<D, C> {
 	 */
 	@Override
 	public Population<D, C> apply(Population<D, C> population, List<Solution<D, C>> offspring,
-			Function<D, C> fitnessFunction) {
+			Function<D, C> fitnessFunction, Comparator<C> goal) {
 
 		return new Population<>(offspring);
 	}

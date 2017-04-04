@@ -3,6 +3,8 @@
  */
 package optimization.genetic.select;
 
+import java.util.Comparator;
+
 import optimization.function.fitness.Function;
 import optimization.util.type.Population;
 
@@ -28,9 +30,11 @@ public abstract class AbstractDoubleRouletteGeneticSelector<D> extends AbstractR
 	 * 
 	 * @param population
 	 * @param function
+	 * @param goal
 	 * @return
 	 */
 	@Override
-	protected abstract double[] getProbabities(Population<D, Double> population, Function<D, Double> function);
+	protected abstract double[] getProbabities(Population<D, Double> population, Function<D, Double> function,
+			Comparator<Double> goal);
 
 }

@@ -3,6 +3,7 @@
  */
 package optimization.genetic.replace;
 
+import java.util.Comparator;
 import java.util.List;
 
 import optimization.function.fitness.Function;
@@ -24,13 +25,13 @@ public class GenerationalStableStateReplacement<D, C extends Comparable<C>> impl
 	 */
 	@Override
 	public Population<D, C> apply(Population<D, C> population, List<Solution<D, C>> offspring,
-			Function<D, C> fitnessFunction) {
+			Function<D, C> fitnessFunction, Comparator<C> goal) {
 
-		Solution<D, C> bestFromOriginalPopulation = Goal.getBestFromPopulation(population);
-		Solution<D, C> bestFromOffspring = Goal.getBestFromPopulation(offspring);
+		Solution<D, C> bestFromOriginalPopulation = Goal.getBestFromPopulation(population, goal);
+		Solution<D, C> bestFromOffspring = Goal.getBestFromPopulation(offspring, goal);
 		Population<D, C> newPopulation = new Population<>(offspring);
 		if (bestFromOriginalPopulation.getFitnessValue().compareTo(bestFromOffspring.getFitnessValue()) > 0) {
-			Solution<D, C> worstFromOffspring = Goal.getWorstFromPopulation(offspring);
+			Solution<D, C> worstFromOffspring = Goal.getWorstFromPopulation(offspring, goal);
 			for (int i = 0; i < newPopulation.getSize(); i++) {
 				if (newPopulation.get(i).getFitnessValue().equals(worstFromOffspring.getFitnessValue())) {
 					newPopulation.set(i, bestFromOriginalPopulation);

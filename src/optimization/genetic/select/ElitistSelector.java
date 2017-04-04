@@ -5,6 +5,7 @@ package optimization.genetic.select;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import optimization.function.fitness.Function;
@@ -15,9 +16,7 @@ import optimization.util.type.Solution;
  * @author Oscar Garavito
  *
  */
-public class ElitistSelector<D, C extends Comparable<C>> extends AbstractGeneticSelector<D, C>
-		implements
-			GeneticSelector<D, C> {
+public class ElitistSelector<D, C> extends AbstractGeneticSelector<D, C> implements GeneticSelector<D, C> {
 
 	/**
 	 * Percent value [0, 1] of elite.
@@ -81,14 +80,16 @@ public class ElitistSelector<D, C extends Comparable<C>> extends AbstractGenetic
 	 * (non-Javadoc)
 	 * @see
 	 * optimization.genetic.select.GeneticSelector#selectParent(optimization.
-	 * util.type.Population, optimization.function.fitness.Function)
+	 * util.type.Population, optimization.function.fitness.Function,
+	 * java.util.Comparator)
 	 */
 	@Override
-	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> fitnessFunction) {
+	public List<Solution<D, C>> selectParent(Population<D, C> population, Function<D, C> fitnessFunction,
+			Comparator<C> goal) {
 
 		List<Solution<D, C>> selectedParents = new ArrayList<>();
 		List<Solution<D, C>> orderedPopulation = new ArrayList<>(population.getPopulation());
-		Collections.sort(orderedPopulation, (s1, s2) -> s2.getFitnessValue().compareTo(s1.getFitnessValue()));
+		Collections.sort(orderedPopulation, Comparator.comparing(Solution::getFitnessValue, goal));
 		int elite = (int) Math.ceil(this.eliteRate * population.getSize());
 		int eliteAndMedianClass = (int) Math.floor((1.0 - this.cullRate) * population.getSize());
 		for (int i = 0; i < this.parentsSampleSize; i += 2) {
