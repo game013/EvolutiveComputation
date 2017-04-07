@@ -48,6 +48,24 @@ public class Solution<D, C> {
 
 	/**
 	 * @param solution
+	 * @param fitnessFunction
+	 */
+	public Solution(D solution, Function<D, C> fitnessFunction, SolutionParameter parameters) {
+
+		this(solution, fitnessFunction.calculate(solution), Optional.ofNullable(parameters));
+	}
+
+	/**
+	 * @param solution
+	 * @param fitnessFunction
+	 */
+	public Solution(D solution, Function<D, C> fitnessFunction, Optional<SolutionParameter> parameters) {
+
+		this(solution, fitnessFunction.calculate(solution), parameters);
+	}
+
+	/**
+	 * @param solution
 	 * @param fitnessValue
 	 * @param parameters
 	 */

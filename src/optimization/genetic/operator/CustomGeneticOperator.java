@@ -7,6 +7,9 @@ import java.util.List;
 
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
+import optimization.genetic.operator.crossover.GeneticCrossover;
+import optimization.genetic.operator.mutation.GeneticMutator;
+import optimization.genetic.operator.mutation.IdenticalMutator;
 import optimization.util.type.Solution;
 
 /**

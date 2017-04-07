@@ -1,7 +1,7 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.genetic.operator;
+package optimization.genetic.operator.mutation;
 
 /**
  * Adapter to genetic mutator interface.

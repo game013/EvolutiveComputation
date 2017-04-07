@@ -1,12 +1,13 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.genetic.operator;
+package optimization.genetic.operator.crossover;
 
 import java.util.List;
 
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
+import optimization.genetic.operator.mutation.GeneticMutator;
 import optimization.util.type.Solution;
 
 /**

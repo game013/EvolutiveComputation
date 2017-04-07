@@ -6,6 +6,8 @@ package optimization.util.type;
 import java.util.HashMap;
 import java.util.Map;
 
+import optimization.util.type.constant.ParameterName;
+
 /**
  * @author Oscar Garavito
  *
@@ -15,7 +17,7 @@ public class SolutionParameter {
 	/**
 	 * Map of parameters.
 	 */
-	private final Map<String, Object> parameterMap;
+	private final Map<ParameterName, Object> parameterMap;
 
 	/**
 	 * 
@@ -48,7 +50,7 @@ public class SolutionParameter {
 	 * @param key
 	 * @param parameter
 	 */
-	public void set(String key, Object parameter) {
+	public void set(ParameterName key, Object parameter) {
 
 		this.parameterMap.put(key, parameter);
 	}

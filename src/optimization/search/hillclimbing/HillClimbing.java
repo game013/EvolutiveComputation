@@ -5,8 +5,8 @@
  */
 package optimization.search.hillclimbing;
 
-import optimization.genetic.operator.GeneticMutator;
-import optimization.genetic.operator.MutatorAdapter;
+import optimization.genetic.operator.mutation.GeneticMutator;
+import optimization.genetic.operator.mutation.MutatorAdapter;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
 import optimization.util.type.Solution;
@@ -15,7 +15,7 @@ import optimization.util.type.Solution;
  *
  * @author Oscar.Garavito
  */
-public class HillClimbing<D, C extends Comparable<C>> implements Search<D, C> {
+public class HillClimbing<D, C> implements Search<D, C> {
 
 	/**
 	 * Number of iterations proposed for current try.
@@ -61,8 +61,8 @@ public class HillClimbing<D, C extends Comparable<C>> implements Search<D, C> {
 			D newSolution = problem.getSpace()
 					.repair(this.mutator.mutate(solution, problem.getFitnessFunction(), problem.getSpace()));
 			boolean wasLastBetter = false;
-			if (problem.getFitnessFunction().calculate(newSolution)
-					.compareTo(problem.getFitnessFunction().calculate(solution)) <= 0) {
+			if (problem.getGoal().compare(problem.getFitnessFunction().calculate(newSolution),
+					problem.getFitnessFunction().calculate(solution)) <= 0) {
 				wasLastBetter = true;
 				solution = newSolution;
 			}

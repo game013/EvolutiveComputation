@@ -1,13 +1,14 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.genetic.operator;
+package optimization.genetic.operator.crossover;
 
 import java.util.BitSet;
 
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
 import optimization.util.type.Solution;
+import optimization.util.type.tuple.Pair;
 
 /**
  * @author Oscar Garavito

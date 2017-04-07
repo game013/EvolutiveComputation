@@ -8,15 +8,16 @@ import java.util.Comparator;
 import java.util.Optional;
 
 import optimization.distribution.Distribution;
+import optimization.distribution.ExponentialDistribution;
 import optimization.distribution.NormalDistribution;
 import optimization.function.fitness.Function;
 import optimization.function.fitness.RastriginFunction;
 import optimization.function.space.HyperCube;
 import optimization.function.space.Space;
-import optimization.genetic.operator.GeneticMutator;
-import optimization.genetic.operator.MutationByDistribution;
-import optimization.genetic.operator.MutatorAdapter;
-import optimization.genetic.operator.OneFifthRule;
+import optimization.genetic.operator.mutation.GeneticMutator;
+import optimization.genetic.operator.mutation.MutationByDistribution;
+import optimization.genetic.operator.mutation.MutatorAdapter;
+import optimization.genetic.operator.mutation.OneFifthRule;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
 import optimization.search.hillclimbing.HillClimbing;
@@ -34,18 +35,18 @@ public class HillClimbingDemo {
 	public static void main(String[] args) {
 
 		int dimension = 10;
-		int numberOfIterations = 100_000;
+		int numberOfIterations = 1_000_000;
 		// run(new ParetoDistribution(0.9, 0.00055), dimension,
 		// numberOfIterations);
 		// System.out.println("***************************************");
 		run(new NormalDistribution(0.2), dimension, numberOfIterations);
 		System.out.println("***************************************");
 		MutatorAdapter<double[], Double> oneFifthAdapter = new OneFifthRule<>(100, 0.9);
-		run(new NormalDistribution(0.2), dimension, numberOfIterations, Optional.of(oneFifthAdapter));
+		//run(new NormalDistribution(0.2), dimension, numberOfIterations, Optional.of(oneFifthAdapter));
 		// System.out.println("***************************************");
 		// run(new UniformDistribution(), dimension, numberOfIterations);
 		// System.out.println("***************************************");
-		// run(new ExponentialDistribution(3), dimension, numberOfIterations);
+		run(new ExponentialDistribution(3), dimension, numberOfIterations);
 	}
 
 	/**
@@ -71,10 +72,11 @@ public class HillClimbingDemo {
 			hillDescent = new HillClimbing<>(numberOfIterations, mutation);
 		}
 		OptimizationProblem<double[], Double> problem = new OptimizationProblem<>(space, rastrigin,
-				Comparator.reverseOrder());
-		int numberOfExperiments = 30;
+				Comparator.naturalOrder());
+		int numberOfExperiments = 3;
 		double[] results = new double[numberOfExperiments];
 		for (int i = 0; i < numberOfExperiments; i++) {
+			System.out.println(String.format("Experiment: [%d]", i));
 			results[i] = hillDescent.solve(problem).getFitnessValue();
 		}
 		System.out.println(String.format("Distribution: [%s]", distribution.getClass().getSimpleName()));

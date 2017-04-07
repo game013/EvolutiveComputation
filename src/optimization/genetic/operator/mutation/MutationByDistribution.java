@@ -1,7 +1,7 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.genetic.operator;
+package optimization.genetic.operator.mutation;
 
 import optimization.distribution.Distribution;
 import optimization.function.fitness.Function;

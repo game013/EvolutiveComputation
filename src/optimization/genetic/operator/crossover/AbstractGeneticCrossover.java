@@ -1,64 +1,22 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.genetic.operator;
+package optimization.genetic.operator.crossover;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
+import optimization.genetic.operator.mutation.GeneticMutator;
 import optimization.util.type.Solution;
+import optimization.util.type.tuple.Pair;
 
 /**
  * @author Oscar Garavito
  *
  */
 public abstract class AbstractGeneticCrossover<D, C> implements GeneticCrossover<D, C> {
-
-	/**
-	 * Pair of solutions to be used in genetic crossover.
-	 * 
-	 * @author Oscar Garavito
-	 *
-	 */
-	protected class Pair<L, R> {
-
-		/**
-		 * 
-		 */
-		private final L left;
-
-		/**
-		 * 
-		 */
-		private final R right;
-
-		/**
-		 * @param left
-		 * @param right
-		 */
-		public Pair(L left, R right) {
-
-			this.left = left;
-			this.right = right;
-		}
-
-		/**
-		 * @return the left
-		 */
-		public L getLeft() {
-			return left;
-		}
-
-		/**
-		 * @return the right
-		 */
-		public R getRight() {
-			return right;
-		}
-
-	}
 
 	/**
 	 * 
