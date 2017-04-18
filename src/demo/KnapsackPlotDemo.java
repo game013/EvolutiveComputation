@@ -5,7 +5,9 @@ package demo;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -56,7 +58,7 @@ public class KnapsackPlotDemo extends ApplicationFrame {
 
 		double[][] data = new double[rows][numberOfFiles];
 		for (int i = 1; i <= numberOfFiles; i++) {
-			try (Scanner scanner = new Scanner(new FileInputStream(String.format("/tmp/big/bests_%d.csv", i)))) {
+			try (Scanner scanner = new Scanner(new FileInputStream(String.format("/tmp/small/bests_%d.csv", i)))) {
 				for (int j = 0; j < rows; j++) {
 					data[j][i - 1] = scanner.nextDouble();
 				}
@@ -84,6 +86,24 @@ public class KnapsackPlotDemo extends ApplicationFrame {
 			} catch (SeriesException e) {
 				System.err.println("Error adding to series");
 			}
+		}
+
+		try (BufferedWriter medianWriter = new BufferedWriter(new FileWriter("/tmp/small_median.dat"));
+				BufferedWriter stDevWriter = new BufferedWriter(new FileWriter("/tmp/small_st_dev.dat"));
+				BufferedWriter maxWriter = new BufferedWriter(new FileWriter("/tmp/small_max.dat"));
+				BufferedWriter minWriter = new BufferedWriter(new FileWriter("/tmp/small_min.dat"))) {
+			for (int i = 0; i < rows; i++) {
+				CommonMetric metric = new CommonMetric(data[i]);
+				medianWriter.write(String.format("%d\t%f\n", i + 1, metric.getMedian()));
+				maxWriter.write(String.format("%d\t%f\n", i + 1, metric.getMax()));
+				minWriter.write(String.format("%d\t%f\n", i + 1, metric.getMin()));
+				if (i % 10_000 == 0) {
+					stDevWriter.write(String.format("%d\t%f\t%f\n", i + 1, metric.getMedian(),
+							metric.getStandardDeviationMedian()));
+				}
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 
 		YIntervalSeriesCollection dataset = new YIntervalSeriesCollection();

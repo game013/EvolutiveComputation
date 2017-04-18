@@ -9,6 +9,8 @@ package optimization.util.type.constant;
  */
 public enum ParameterName {
 
-	SIGMA;
+	SIGMA,
+
+	ADAPTER;
 
 }

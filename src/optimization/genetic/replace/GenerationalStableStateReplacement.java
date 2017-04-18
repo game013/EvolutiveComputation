@@ -30,7 +30,7 @@ public class GenerationalStableStateReplacement<D, C extends Comparable<C>> impl
 		Solution<D, C> bestFromOriginalPopulation = Goal.getBestFromPopulation(population, goal);
 		Solution<D, C> bestFromOffspring = Goal.getBestFromPopulation(offspring, goal);
 		Population<D, C> newPopulation = new Population<>(offspring);
-		if (bestFromOriginalPopulation.getFitnessValue().compareTo(bestFromOffspring.getFitnessValue()) > 0) {
+		if (bestFromOriginalPopulation.getFitnessValue().compareTo(bestFromOffspring.getFitnessValue()) < 0) {
 			Solution<D, C> worstFromOffspring = Goal.getWorstFromPopulation(offspring, goal);
 			for (int i = 0; i < newPopulation.getSize(); i++) {
 				if (newPopulation.get(i).getFitnessValue().equals(worstFromOffspring.getFitnessValue())) {

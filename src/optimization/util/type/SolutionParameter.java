@@ -31,7 +31,7 @@ public class SolutionParameter {
 	 * @param key
 	 * @return
 	 */
-	public Object get(String key) {
+	public Object get(ParameterName key) {
 
 		return this.parameterMap.get(key);
 	}
@@ -41,7 +41,7 @@ public class SolutionParameter {
 	 * @param clazz
 	 * @return
 	 */
-	public <T> T get(String key, Class<T> clazz) {
+	public <T> T get(ParameterName key, Class<T> clazz) {
 
 		return clazz.cast(this.parameterMap.get(key));
 	}
@@ -53,6 +53,12 @@ public class SolutionParameter {
 	public void set(ParameterName key, Object parameter) {
 
 		this.parameterMap.put(key, parameter);
+	}
+
+	@Override
+	public String toString() {
+
+		return this.parameterMap.toString();
 	}
 
 }

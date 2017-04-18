@@ -46,6 +46,9 @@ public class ForLoopTerminationCondition<T> implements TerminationCondition<T> {
 	@Override
 	public boolean test(T data) {
 
+		if((this.counter + 1) % 1000 == 0) {
+			System.out.println(String.format("Iteration: %d", this.counter + 1));
+		}
 		return this.counter++ < this.maxIterations;
 	}
 

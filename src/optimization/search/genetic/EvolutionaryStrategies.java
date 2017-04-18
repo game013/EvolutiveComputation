@@ -10,7 +10,7 @@ import java.util.List;
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
 import optimization.genetic.operator.mutation.GeneticMutator;
-import optimization.genetic.operator.recombination.EvolutiveRecombinator;
+import optimization.genetic.operator.recombination.EvolutionaryRecombinator;
 import optimization.genetic.parameter.ParameterGenerator;
 import optimization.genetic.replace.GeneticReplacement;
 import optimization.genetic.select.GeneticSelector;
@@ -24,13 +24,13 @@ import optimization.util.type.Solution;
  * @author Oscar Garavito
  *
  */
-public class EvolutiveStrategies<D, C> extends AbstractGeneticAlgorithm<D, C> implements Search<D, C> {
+public class EvolutionaryStrategies<D, C> extends AbstractGeneticAlgorithm<D, C> implements Search<D, C> {
 
 	private final ParameterGenerator parameterGenerator;
 
 	private final GeneticSelector<D, C> selector;
 
-	private final EvolutiveRecombinator<D, C> recombinator;
+	private final EvolutionaryRecombinator<D, C> recombinator;
 
 	private final GeneticMutator<D, C> mutator;
 
@@ -38,9 +38,9 @@ public class EvolutiveStrategies<D, C> extends AbstractGeneticAlgorithm<D, C> im
 
 	private final int numberOfChildren;
 
-	public EvolutiveStrategies(int populationSize, TerminationCondition<Population<D, C>> terminationCondition,
+	public EvolutionaryStrategies(int populationSize, TerminationCondition<Population<D, C>> terminationCondition,
 			ParameterGenerator parameterGenerator, int numberOfChildren, GeneticSelector<D, C> selector,
-			EvolutiveRecombinator<D, C> recombinator, GeneticMutator<D, C> mutator,
+			EvolutionaryRecombinator<D, C> recombinator, GeneticMutator<D, C> mutator,
 			GeneticReplacement<D, C> replacement) {
 
 		super(populationSize, terminationCondition);
@@ -84,9 +84,9 @@ public class EvolutiveStrategies<D, C> extends AbstractGeneticAlgorithm<D, C> im
 		List<Solution<D, C>> children = new ArrayList<>(this.numberOfChildren);
 		for (int i = 0; i < this.numberOfChildren; i++) {
 			List<Solution<D, C>> parents = this.selector.selectParent(population, fitnessFunction, goal);
-			Solution<D, C> child = this.recombinator.recombine(parents, fitnessFunction);
-			D mutatedChild = this.mutator.mutate(child.getSolution(), fitnessFunction, space);
-			children.add(new Solution<D, C>(mutatedChild, fitnessFunction, child.getParameters()));
+			Solution<D, C> child = this.recombinator.recombine(parents, fitnessFunction, goal);
+			Solution<D, C> mutatedChild = this.mutator.mutate(child, fitnessFunction, space);
+			children.add(new Solution<D, C>(space.repair(mutatedChild), fitnessFunction, child.getParameters()));
 		}
 		return this.replacement.apply(population, children, fitnessFunction, goal);
 	}

@@ -1,18 +1,13 @@
 /**
  * COPYRIGHT (C) 2015. All Rights Reserved.
  */
-package optimization.genetic.operator.mutation;
-
-import optimization.distribution.Distribution;
-import optimization.distribution.NormalDistribution;
+package optimization.util;
 
 /**
- * Implementation of mutator adapter for one-fifth rule.
- * 
  * @author Oscar Garavito
  *
  */
-public class OneFifthRule<D, C> implements MutatorAdapter<D, C> {
+public class OneFifthRule {
 
 	/**
 	 * One fifth constant.
@@ -59,26 +54,19 @@ public class OneFifthRule<D, C> implements MutatorAdapter<D, C> {
 	 * optimization.genetic.operator.MutatorAdapter#adaptMutator(optimization.
 	 * genetic.operator.GeneticMutator, boolean)
 	 */
-	@Override
-	public GeneticMutator<D, C> adaptMutator(GeneticMutator<D, C> mutator, boolean wasLastBetter) {
+	public double adaptMutator(double sigma, boolean wasLastBetter) {
 
+		double newSigma = sigma;
 		this.currentIteration++;
 		if (wasLastBetter) {
 			this.improvements++;
 		}
 		if (this.currentIteration == this.iterationPeriod) {
-			if (MutationByDistribution.class.isAssignableFrom(mutator.getClass())) {
-				MutationByDistribution castedMutator = MutationByDistribution.class.cast(mutator);
-				Distribution distribution = castedMutator.getDistribution();
-				if (NormalDistribution.class.isAssignableFrom(distribution.getClass())) {
-					NormalDistribution normalDistribution = NormalDistribution.class.cast(distribution);
-					normalDistribution.setSigma(this.apply(normalDistribution.getSigma()));
-				}
-			}
+			newSigma = this.apply(sigma);
 			this.currentIteration = 0;
 			this.improvements = 0;
 		}
-		return mutator;
+		return newSigma;
 	}
 
 	/**

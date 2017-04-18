@@ -3,25 +3,24 @@
  */
 package demo;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 
 import optimization.distribution.Distribution;
-import optimization.distribution.ExponentialDistribution;
 import optimization.distribution.NormalDistribution;
 import optimization.function.fitness.Function;
-import optimization.function.fitness.RastriginFunction;
-import optimization.function.space.HyperCube;
+import optimization.function.fitness.GriewankFunction;
 import optimization.function.space.Space;
 import optimization.genetic.operator.mutation.GeneticMutator;
 import optimization.genetic.operator.mutation.MutationByDistribution;
 import optimization.genetic.operator.mutation.MutatorAdapter;
-import optimization.genetic.operator.mutation.OneFifthRule;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
 import optimization.search.hillclimbing.HillClimbing;
-import optimization.util.metric.CommonMetric;
+import optimization.util.FunctionSpaces;
+import optimization.util.metric.GenericMetric;
+import optimization.util.metric.Tracer;
+import optimization.util.type.Solution;
 
 /**
  * @author Oscar Garavito
@@ -34,19 +33,21 @@ public class HillClimbingDemo {
 	 */
 	public static void main(String[] args) {
 
-		int dimension = 10;
-		int numberOfIterations = 1_000_000;
+		int dimension = 100;
+		int numberOfIterations = 10_000_000;
 		// run(new ParetoDistribution(0.9, 0.00055), dimension,
 		// numberOfIterations);
 		// System.out.println("***************************************");
 		run(new NormalDistribution(0.2), dimension, numberOfIterations);
 		System.out.println("***************************************");
-		MutatorAdapter<double[], Double> oneFifthAdapter = new OneFifthRule<>(100, 0.9);
-		//run(new NormalDistribution(0.2), dimension, numberOfIterations, Optional.of(oneFifthAdapter));
+		// MutatorAdapter<double[], Double> oneFifthAdapter = new
+		// OneFifthRule<>(100, 0.9);
+		// run(new NormalDistribution(0.2), dimension, numberOfIterations,
+		// Optional.of(oneFifthAdapter));
 		// System.out.println("***************************************");
 		// run(new UniformDistribution(), dimension, numberOfIterations);
 		// System.out.println("***************************************");
-		run(new ExponentialDistribution(3), dimension, numberOfIterations);
+		// run(new ExponentialDistribution(3), dimension, numberOfIterations);
 	}
 
 	/**
@@ -62,8 +63,10 @@ public class HillClimbingDemo {
 	private static void run(Distribution distribution, int dimension, int numberOfIterations,
 			Optional<MutatorAdapter<double[], Double>> adapter) {
 
-		Space<double[]> space = getRastriginSpace(dimension);
-		Function<double[], Double> rastrigin = new RastriginFunction(10);
+		Space<double[]> space = FunctionSpaces.getGriewankSpace(dimension);
+//		Space<double[]> space = FunctionSpaces.getRastriginSpace(dimension);
+		// Function<double[], Double> rastrigin = new RastriginFunction(dimension);
+		Function<double[], Double> rastrigin = new GriewankFunction();
 		GeneticMutator<double[], Double> mutation = new MutationByDistribution(distribution);
 		Search<double[], Double> hillDescent;
 		if (adapter.isPresent()) {
@@ -73,32 +76,16 @@ public class HillClimbingDemo {
 		}
 		OptimizationProblem<double[], Double> problem = new OptimizationProblem<>(space, rastrigin,
 				Comparator.naturalOrder());
-		int numberOfExperiments = 3;
-		double[] results = new double[numberOfExperiments];
-		for (int i = 0; i < numberOfExperiments; i++) {
+		int numberOfExperiments = 30;
+		Tracer.add(Solution.class);
+		for (int i = 1; i <= numberOfExperiments; i++) {
+			Tracer.start();
 			System.out.println(String.format("Experiment: [%d]", i));
-			results[i] = hillDescent.solve(problem).getFitnessValue();
-		}
-		System.out.println(String.format("Distribution: [%s]", distribution.getClass().getSimpleName()));
-		if (adapter.isPresent()) {
-			System.out.println(String.format("Using adapter: [%s]", adapter.get().getClass().getSimpleName()));
-		} else {
-			System.out.println("Using adapter: [None]");
-		}
-		System.out.println(new CommonMetric(results));
-	}
+			hillDescent.solve(problem).getFitnessValue();
 
-	/**
-	 * @param dimension
-	 * @return
-	 */
-	public static Space<double[]> getRastriginSpace(int dimension) {
-
-		double[] lowerBound = new double[dimension];
-		Arrays.fill(lowerBound, -5.12);
-		double[] upperBound = new double[dimension];
-		Arrays.fill(upperBound, 5.12);
-		return new HyperCube(lowerBound, upperBound);
+			GenericMetric metric = new GenericMetric();
+			metric.putDataOfBestInFile(i, "gw/hill_climbing");
+		}
 	}
 
 }

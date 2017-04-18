@@ -7,11 +7,14 @@ package optimization.distribution;
 
 import java.util.Random;
 
+import optimization.util.type.SolutionParameter;
+import optimization.util.type.constant.ParameterName;
+
 /**
  *
  * @author Estudiante
  */
-public class NormalDistribution implements Distribution {
+public class NormalDistribution implements ParametricalDistribution {
 
 	/**
 	 * Standard deviation to calculate next random.
@@ -54,6 +57,35 @@ public class NormalDistribution implements Distribution {
 	 */
 	public void setSigma(double sigma) {
 		this.sigma = sigma;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see optimization.distribution.ParametricalDistribution#setParameters(
+	 * optimization.util.type.SolutionParameter)
+	 */
+	@Override
+	public void setParameters(SolutionParameter parameters) {
+
+		if (Double.class.isAssignableFrom(parameters.get(ParameterName.SIGMA).getClass())) {
+			this.sigma = ((Double) parameters.get(ParameterName.SIGMA));
+		} else {
+			throw new IllegalArgumentException("Parameter SIGMA must be numeric.");
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * optimization.distribution.ParametricalDistribution#setParameter(java.lang
+	 * .Object)
+	 */
+	@Override
+	public <T> void setParameter(T parameter) {
+
+		if (Double.class.isAssignableFrom(parameter.getClass())) {
+			this.sigma = (Double) parameter;
+		}
 	}
 
 }

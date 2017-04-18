@@ -13,20 +13,20 @@ import optimization.util.type.Solution;
  * @author Oscar Garavito
  *
  */
-public class KnapsackMetric {
+public class GenericMetric {
 
 	private List<Object> solutionCollection;
 
-	private static final String BESTS_FILE_NAME = "/tmp/ec/particle_swarm/bests_%d.csv";
+	private static final String FILE_PATH_TEMPLATE = "/tmp/%s/bests_%d.csv";
 
-	public KnapsackMetric() {
+	public GenericMetric() {
 
 		solutionCollection = Tracer.get(Solution.class);
 	}
 
-	public void putDataOfBestInFile(int runId) {
+	public void putDataOfBestInFile(int runId, String dirPath) {
 
-		try (FileWriter fw = new FileWriter(String.format(BESTS_FILE_NAME, runId))) {
+		try (FileWriter fw = new FileWriter(String.format(FILE_PATH_TEMPLATE, dirPath, runId))) {
 			for (Object solution : solutionCollection) {
 				Solution<?, ?> sol = (Solution<?, ?>) solution;
 				fw.write(String.format("%f\n", (double) sol.getFitnessValue()));

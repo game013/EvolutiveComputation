@@ -9,6 +9,7 @@ import optimization.genetic.operator.mutation.GeneticMutator;
 import optimization.genetic.operator.mutation.MutatorAdapter;
 import optimization.problem.OptimizationProblem;
 import optimization.search.Search;
+import optimization.util.metric.Tracer;
 import optimization.util.type.Solution;
 
 /**
@@ -53,6 +54,11 @@ public class HillClimbing<D, C> implements Search<D, C> {
 		this.mutatorAdapter = mutatorAdapter;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see optimization.search.Search#solve(optimization.problem.
+	 * OptimizationProblem)
+	 */
 	@Override
 	public Solution<D, C> solve(OptimizationProblem<D, C> problem) {
 
@@ -67,15 +73,14 @@ public class HillClimbing<D, C> implements Search<D, C> {
 				solution = newSolution;
 			}
 			this.mutator = this.mutatorAdapter.adaptMutator(this.mutator, wasLastBetter);
+			if((i + 1) % 100 == 0) {
+				Tracer.trace(Solution.class, new Solution<>(solution, problem.getFitnessFunction()));
+			}
+			if((i + 1) % 100_000 == 0) {
+				System.out.println("Iteration: " + ((i + 1) / 100));
+			}
 		}
 		return new Solution<>(solution, problem.getFitnessFunction());
-	}
-
-	/**
-	 * @return the mutator
-	 */
-	public GeneticMutator<D, C> getMutator() {
-		return mutator;
 	}
 
 }

@@ -109,7 +109,7 @@ public class DifferentialEvolution extends AbstractGeneticAlgorithm<double[], Do
 				newSolution[i] = individual.getSolution()[i];
 			}
 		}
-		return new Solution<>(newSolution, fitnessFunction);
+		return new Solution<>(space.repair(newSolution), fitnessFunction);
 	}
 
 	/**

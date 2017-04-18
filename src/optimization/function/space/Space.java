@@ -38,9 +38,15 @@ public interface Space<D> {
 	 * @return
 	 */
 	D repair(D data);
-	
+
+	/**
+	 * Repairs given solution, returning it to the space.
+	 * 
+	 * @param solution
+	 * @return
+	 */
 	default D repair(Solution<D, ?> solution) {
-		
+
 		D data = solution.getSolution();
 		return repair(data);
 	}
