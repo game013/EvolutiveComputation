@@ -79,7 +79,7 @@ public class BitSetSpace implements Space<BitSet> {
 	@Override
 	public BitSet getUpperBound() {
 
-		throw new IllegalStateException("Lower bound not exists.");
+		throw new IllegalStateException("Upper bound not exists.");
 	}
 
 	/*

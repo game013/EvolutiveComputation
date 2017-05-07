@@ -4,7 +4,6 @@
 package optimization.genetic.operator.crossover;
 
 import java.util.BitSet;
-import java.util.Random;
 
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
@@ -16,11 +15,6 @@ import optimization.util.type.tuple.Pair;
  *
  */
 public class BinaryCrossover<C> extends AbstractGeneticCrossover<BitSet, C> implements GeneticCrossover<BitSet, C> {
-
-	/**
-	 * Random object.
-	 */
-	private static final Random RANDOM = new Random();
 
 	/**
 	 * @param xoverProbability

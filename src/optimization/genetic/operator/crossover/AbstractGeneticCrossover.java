@@ -5,6 +5,7 @@ package optimization.genetic.operator.crossover;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import optimization.function.fitness.Function;
 import optimization.function.space.Space;
@@ -17,6 +18,11 @@ import optimization.util.type.tuple.Pair;
  *
  */
 public abstract class AbstractGeneticCrossover<D, C> implements GeneticCrossover<D, C> {
+
+	/**
+	 * Random object.
+	 */
+	protected static final Random RANDOM = new Random();
 
 	/**
 	 * 
