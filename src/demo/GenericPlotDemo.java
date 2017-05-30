@@ -13,16 +13,19 @@ import optimization.util.metric.CommonMetric;
 
 public class GenericPlotDemo {
 	
+	public static final String GW = "gw/";
 	public static final String T1 = "evolutionary/";
 	public static final String T2 = "particle_swarm/";
 	public static final String T3 = "differential_evolution/";
 	public static final String T4 = "hill_climbing/";
+	public static final String MO = "mo/";
 
-	private static final String PATH_TEMPLATE = "/tmp/gw/" + T4;
+	// private static final String PATH_TEMPLATE = "/tmp/gw/" + T4;
+	private static final String PATH_TEMPLATE = "/tmp/" + MO;
 
 	private static final int NUMBER_OF_FILES = 30;
 
-	private static final int ROWS = 100_000;
+	private static final int ROWS = 10_000;
 
 	/**
 	 * @param numberOfFiles
@@ -33,9 +36,11 @@ public class GenericPlotDemo {
 
 		double[][] data = new double[rows][numberOfFiles];
 		for (int i = 1; i <= numberOfFiles; i++) {
-			try (Scanner scanner = new Scanner(new FileInputStream(String.format(PATH_TEMPLATE + "bests_%d.csv", i)))) {
+			try (Scanner scanner = new Scanner(new FileInputStream(String.format(PATH_TEMPLATE + "errors_%d.txt", i)))) {
 				for (int j = 0; j < rows; j++) {
-					data[j][i - 1] = scanner.nextDouble();
+					// data[j][i - 1] = scanner.nextDouble();
+					String[] line = scanner.nextLine().split(" ");
+					data[j][i - 1] = Double.parseDouble(line[1].replaceAll(",", "."));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -58,7 +63,7 @@ public class GenericPlotDemo {
 				medianWriter.write(String.format("%d\t%f\n", i + 1, metric.getMedian()));
 				maxWriter.write(String.format("%d\t%f\n", i + 1, metric.getMax()));
 				minWriter.write(String.format("%d\t%f\n", i + 1, metric.getMin()));
-				if (i % 10_000 == 0) {
+				if ((i + 1) % 1_000 == 0 || i == 0) {
 					stDevWriter.write(String.format("%d\t%f\t%f\n", i + 1, metric.getMedian(),
 							metric.getStandardDeviationMedian()));
 				}

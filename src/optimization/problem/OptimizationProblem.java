@@ -46,6 +46,16 @@ public class OptimizationProblem<D, C> {
 	}
 
 	/**
+	 * @param space
+	 * @param fitnessFunction
+	 * @param goal
+	 */
+	public OptimizationProblem(Space<D> space, Function<D, C> fitnessFunction) {
+
+		this(space, fitnessFunction, null);
+	}
+
+	/**
 	 * @return
 	 */
 	public Space<D> getSpace() {

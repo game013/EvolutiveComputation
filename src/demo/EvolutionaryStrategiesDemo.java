@@ -79,9 +79,9 @@ public class EvolutionaryStrategiesDemo {
 		Distribution distribution = new NormalDistribution(0.2);
 
 		GeneticSelector<double[], Double> selector = new UniformGeneticSelector<>(PARENTS_SAMPLE_SIZE);
-		// EvolutionaryRecombinator<double[], Double> recombinator = new DominantRecombinator();
-		EvolutionaryRecombinator<double[], Double> recombinator = new IntermediateRecombinator();
-		GeneticMutator<double[], Double> mutator = new MutationByDistribution(distribution);
+		// EvolutionaryRecombinator<double[], Double> recombinator = new DominantRecombinator<>();
+		EvolutionaryRecombinator<double[], Double> recombinator = new IntermediateRecombinator<>();
+		GeneticMutator<double[], Double> mutator = new MutationByDistribution<>(distribution);
 		// GeneticReplacement<double[], Double> replacement = new GenerationalStableStateReplacement<>();
 		GeneticReplacement<double[], Double> replacement = new ElitistReplacement<>(POP_SIZE, true, 0.02, 0.4);
 

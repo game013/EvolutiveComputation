@@ -14,7 +14,7 @@ import optimization.util.type.constant.ParameterName;
  * @author Oscar Garavito
  *
  */
-public class IntermediateRecombinator implements EvolutionaryRecombinator<double[], Double> {
+public class IntermediateRecombinator<C> implements EvolutionaryRecombinator<double[], C> {
 
 	/*
 	 * (non-Javadoc)
@@ -23,11 +23,11 @@ public class IntermediateRecombinator implements EvolutionaryRecombinator<double
 	 * recombine(java.util.List, java.util.Comparator)
 	 */
 	@Override
-	public double[] recombine(List<Solution<double[], Double>> parents, Comparator<Double> goal) {
+	public double[] recombine(List<Solution<double[], C>> parents, Comparator<C> goal) {
 
 		double[] child;
 		if (!parents.isEmpty()) {
-			Solution<double[], Double> firstParent = parents.get(0);
+			Solution<double[], C> firstParent = parents.get(0);
 			child = new double[firstParent.getSolution().length];
 			for (int i = 0; i < child.length; i++) {
 				double value = 0;
@@ -49,7 +49,7 @@ public class IntermediateRecombinator implements EvolutionaryRecombinator<double
 	 * recombineParameters(java.util.List, java.util.Comparator)
 	 */
 	@Override
-	public SolutionParameter recombineParameters(List<Solution<double[], Double>> parents, Comparator<Double> goal) {
+	public SolutionParameter recombineParameters(List<Solution<double[], C>> parents, Comparator<C> goal) {
 
 		SolutionParameter defaultParameter = new SolutionParameter();
 		defaultParameter.set(ParameterName.SIGMA, 0.0);

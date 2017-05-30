@@ -17,7 +17,7 @@ import optimization.util.type.constant.ParameterName;
  * @author Oscar Garavito
  *
  */
-public class MutationByDistribution implements GeneticMutator<double[], Double> {
+public class MutationByDistribution<C> implements GeneticMutator<double[], C> {
 
 	/**
 	 * Distribution to be used in variation.
@@ -40,8 +40,8 @@ public class MutationByDistribution implements GeneticMutator<double[], Double> 
 	 * optimization.function.space.Space)
 	 */
 	@Override
-	public Solution<double[], Double> mutate(Solution<double[], Double> child,
-			Function<double[], Double> fitnessFunction, Space<double[]> space) {
+	public Solution<double[], C> mutate(Solution<double[], C> child, Function<double[], C> fitnessFunction,
+			Space<double[]> space) {
 
 		// Mutation of endogenous parameter
 		Optional<SolutionParameter> parameters = child.getParameters();
@@ -56,7 +56,7 @@ public class MutationByDistribution implements GeneticMutator<double[], Double> 
 			((ParametricalDistribution) this.distribution).setParameters(parameters);
 		}
 
-		Solution<double[], Double> solution = GeneticMutator.super.mutate(child, fitnessFunction, space);
+		Solution<double[], C> solution = GeneticMutator.super.mutate(child, fitnessFunction, space);
 		return solution;
 	}
 
@@ -68,7 +68,7 @@ public class MutationByDistribution implements GeneticMutator<double[], Double> 
 	 * optimization.function.space.Space)
 	 */
 	@Override
-	public double[] mutate(double[] origin, Function<double[], Double> fitnessFunction, Space<double[]> space) {
+	public double[] mutate(double[] origin, Function<double[], C> fitnessFunction, Space<double[]> space) {
 
 		double[] result = new double[origin.length];
 		for (int i = 0; i < origin.length; i++) {

@@ -3,10 +3,13 @@
  */
 package demo;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import funico.interpreter.ExampleException;
 import funico.interpreter.Extractor;
@@ -60,20 +63,24 @@ public class FunicoDemo {
 	public void run() {
 
 		try {
-			String extractorExamples = "geq(0,1) = false; geq(0,0) = true; geq(1,0) = true";
-			String examples = extractorExamples
-					+ "geq(1,1) = true; geq(1,2) = false; geq(2,1) = true; geq(2,5) = false;"
-					+ "geq(5,2) = true; geq(3,3) = true";
+			/*
+			 * String extractorExamples =
+			 * "geq(0,1) = false; geq(0,0) = true; geq(1,0) = true"; String
+			 * examples = extractorExamples +
+			 * "geq(1,1) = true; geq(1,2) = false; geq(2,1) = true; geq(2,5) = false;"
+			 * + "geq(5,2) = true; geq(3,3) = true";
+			 */
+			Input input = readInput();
 
-			Extractor ext = new Extractor(extractorExamples);
+			Extractor ext = new Extractor(input.getEquations());
 			Map<String, String> examplesMap = new HashMap<>();
-			for (String example : examples.split(";")) {
+			for (String example : input.getEquations().split(";")) {
 				String[] eq = example.split("=");
 				examplesMap.put(eq[0].trim(), eq[1].trim());
 			}
 			GeneticSelector<List<FunicoNode>, Integer> selector = new ElitistSelector<>(POP_SIZE);
 			Function<List<FunicoNode>, Integer> funicoFunction = new FunicoFunction(examplesMap);
-			Space<List<FunicoNode>> space = new FunicoSpace(MAX_NODES_PER_EQUATION, MAX_EQUATIONS,
+			Space<List<FunicoNode>> space = new FunicoSpace(input.maxNodesPerEquation, input.maxEquations,
 					ext.getTableFunctors(), ext.getTableVariables(), ext.getTableTerminals());
 			GeneticCrossover<List<FunicoNode>, Integer> crossover = new FunicoCrossover(0.7);
 			GeneticMutator<List<FunicoNode>, Integer> mutator = new FunicoMutator(0.6);
@@ -93,6 +100,38 @@ public class FunicoDemo {
 
 		} catch (ExampleException | LexicalException | SyntacticalException ex) {
 			System.out.println(ex);
+		}
+	}
+
+	private Input readInput() {
+
+		try (Scanner scan = new Scanner(System.in)) {
+			int maxEq = scan.nextInt();
+			int maxNodPerEq = scan.nextInt();
+			List<String> eqs = new ArrayList<>();
+			String line = scan.nextLine();
+			while ((line = scan.nextLine()).length() > 0) {
+				eqs.add(line);
+			}
+			return new Input(maxEq, maxNodPerEq, eqs);
+		}
+	}
+
+	class Input {
+		int maxEquations;
+		int maxNodesPerEquation;
+		List<String> equations;
+
+		public Input(int maxEquations, int maxNodesPerEquation, List<String> equations) {
+
+			this.maxEquations = maxEquations;
+			this.maxNodesPerEquation = maxNodesPerEquation;
+			this.equations = equations;
+		}
+
+		public String getEquations() {
+
+			return this.equations.stream().collect(Collectors.joining(";"));
 		}
 	}
 
