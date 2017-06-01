@@ -24,6 +24,11 @@ public class Solution<D, C> {
 	private final C fitnessValue;
 
 	/**
+	 * Partial fitness value
+	 */
+	private final C partialFitnessValue;
+
+	/**
 	 * Parameters associated to current solution.
 	 */
 	private final Optional<SolutionParameter> parameters;
@@ -44,6 +49,15 @@ public class Solution<D, C> {
 	public Solution(D solution, C fitnessValue) {
 
 		this(solution, fitnessValue, Optional.empty());
+	}
+
+	/**
+	 * @param solution
+	 * @param fitnessValue
+	 */
+	public Solution(D solution, C fitnessValue, C partialFitnessValue) {
+
+		this(solution, fitnessValue, Optional.empty(), partialFitnessValue);
 	}
 
 	/**
@@ -81,8 +95,19 @@ public class Solution<D, C> {
 	 */
 	public Solution(D solution, C fitnessValue, Optional<SolutionParameter> parameters) {
 
+		this(solution, fitnessValue, parameters, fitnessValue);
+	}
+
+	/**
+	 * @param solution
+	 * @param fitnessValue
+	 * @param parameters
+	 */
+	public Solution(D solution, C fitnessValue, Optional<SolutionParameter> parameters, C partialFitnessValue) {
+
 		this.solution = solution;
 		this.fitnessValue = fitnessValue;
+		this.partialFitnessValue = partialFitnessValue;
 		this.parameters = parameters;
 	}
 
@@ -98,6 +123,13 @@ public class Solution<D, C> {
 	 */
 	public C getFitnessValue() {
 		return fitnessValue;
+	}
+
+	/**
+	 * @return the partialFitnessValue
+	 */
+	public C getPartialFitnessValue() {
+		return partialFitnessValue;
 	}
 
 	/**
