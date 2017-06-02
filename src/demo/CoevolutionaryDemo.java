@@ -59,7 +59,7 @@ public class CoevolutionaryDemo {
 
 	public static void main(String[] args) {
 
-		new CoevolutionaryDemo().runAll(2);
+		new CoevolutionaryDemo().runAll(30);
 	}
 
 	private void runAll(int numOfExperiments) {
